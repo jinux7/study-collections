@@ -1,0 +1,23 @@
+{
+  "name": "webpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "dependencies": {
+    "fast-deep-equal": "^1.0.0",
+    "webpack": "^3.5.5"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.16",
+    "html-webpack-plugin": "^2.30.1",
+    "lodash": "^4.17.4",
+    "webpack-dev-server": "^2.7.1"
+  },
+  "scripts": {
+    "watch": "webpack --watch",
+    "build": "webpack",
+    "dev": "webpack-dev-server --open"
+  },
+  "author": "",
+  "license": "ISC"
+}

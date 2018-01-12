@@ -5,3 +5,5 @@
 ### demo2
 >> 利用了webpack打包，直接npm安装了 shallow-equals 这个模块。有一个比较简单的比较两个对象是否相等的深比较,JSON.stringify(),将对象转化为字符串后再进行比较。
 
+### demo3
+>> 用到了fast-deep-equal深比对的模块包，不错哦。
