@@ -3,16 +3,19 @@
 <head>
 	<meta charset="UTF-8">
 	<title>shallowEqual</title>
-	<script src="../lib/shallowEqual.js"></script>
+	<script src="./lib/shallowEqual.js"></script>
+	<script src="./lib/deepEqual.js"></script>
 </head>
 <body>
 	
 <script>
-	var obj1 = {name:"tom",age:23,list:true};
-	var obj2 = {name:"tom",age:23,list:true};
+	var obj1 = {name:"tom",age:23,list:[1,2,3]};
+	var obj2 = {name:"tom",age:23,list:[1,2,3]};
 
-	var isEqual = shallowEqual(obj1,obj2);
-	console.log(isEqual);
+	var isEqual_1 = shallowEqual(obj1,obj2);
+	var isEqual_2 = deepEqual(obj1,obj2);
+	console.log('shallow->',isEqual_1);
+	console.log('deep->',isEqual_2);
 </script>
 </body>
 </html>
