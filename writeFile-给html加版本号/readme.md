@@ -1,0 +1,2 @@
+# add version
+#### 这是一个向文件中添加version版本字符串的小代码，使用场景，在react项目中，需求中有在生成的html里边加入版本号，我思前想后最后决定在head位置里加入一个meta标签，自定义个version来表示版本信息，用在react中，可以直接放在build.js文件中，由于本人对build配置文件并没有深入研究，所以直接在最上边用sync的fs方法来读写文件，build.js里边已经添加这段代码，根据package.json中version的值在打包的时候自动加入meta。
