@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>deepChangeObject</title>
+</head>
+<body>
+	<h1>深度更改对象的key或者value</h1>
+</body>
+<script>
+	function clone(data){
+        if(typeof data !== 'object'){
+            return data;
+        }
+        if(data===null){
+            return null;
+        }
+        let obj = data instanceof Array?[]:{}
+        for(let attr in data){
+            if(attr==='label'){
+                obj['title'] = clone(data[attr]);
+            }else{
+                if(clone(data[attr])===null) continue;
+                obj[attr] = clone(data[attr]);                
+            }
+        }
+        return obj;
+    }
+    var data = [
+    {
+    	label: '沈阳',
+    	key: 'sy',
+    	children: [
+    		{
+    			label: '皇姑',
+    			key: 'hg',
+    			children: null
+    		},
+    		{
+    			label: '沈河',
+    			key: 'sh',
+    			children: null
+    		}
+    	]
+    },
+    {
+    	label: '北京',
+    	key: 'bj',
+    	children: [
+    		{
+    			label: '海淀',
+    			key: 'hd',
+    			children: null
+    		},
+    		{
+    			label: '昌平',
+    			key: 'cp',
+    			children: null
+    		}
+    	]
+    }];
+    console.log(clone(data));
+</script>
+</html>
