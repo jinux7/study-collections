@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>es7-async-await</title>
+</head>
+<body>
+	<h1>es7-async-await</h1>
+</body>
+<script>
+	//写一个返回Promise的异步函数
+	function asyncTime(val, ms){
+		return new Promise(function(resolve,reject){
+			setTimeout(function(){
+				resolve(val);
+			},ms);
+		});
+	}  
+
+	//async函数
+	async function testAsync(){
+		let a = await asyncTime(1, 1000); //a的值就是Promise函数里面resolve的参数值
+		console.log(a);
+		let b = await asyncTime(a+1, 1000);
+		console.log(b);
+		let c = await asyncTime(b+1, 1000);
+		console.log(c);
+		let d = await 123; //await后面可以不是Promise函数，但是会自动包装成一个Promise函数并且立即向后执行
+		console.log(d);
+		return c;
+	}
+	testAsync().then(function(res){
+		console.log('async函数的then函数->',res);
+	});
+
+	//async函数
+	async function testAsync_2(){
+		let a = await testAsync(); //因为async本身执行后会返回一个Promise函数(async函数内部return的值只作为async返回的Promise函数的then里的参数传入)，所以此处也可以在await后边写async函数。
+		console.log(a);
+		return a;
+	}
+	testAsync_2().then(function(res){
+		console.log('async函数2的then函数->',res);
+	});
+
+	//再来一个多个异步函数执行的例子
+	async function testAsync_3(){
+		let a = await Promise.all([asyncTime('all1',2000),asyncTime('all2',2000),asyncTime('all3',2000)]);
+		console.log(a);
+		return a;
+	}
+	testAsync_3().then(function(res){
+		alert(res);
+	});
+</script>
+</html>
