@@ -17,4 +17,12 @@ npm install  -g  gitbook-cli
 ```text
 book sm
 ```
-接着gitbook
+接着 gitbook build
+```text
+gitbook build
+```
+在目录下生成一个_book文件夹，里边已经是转换好了的html电子书，想用浏览器访问的话还得使用
+```text
+gitbook serve
+```
+默认port 4000，直接访问即可浏览电纸书内容，一个简单的制作电子书就完成了。
