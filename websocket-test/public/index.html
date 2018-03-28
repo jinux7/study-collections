@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>socket-test</title>
+</head>
+<style>
+	#input_mes {
+		height: 30px;
+		border: solid 1px #999999;
+		border-radius: 3px;
+		font-size: 16px;
+		padding-left: 3px;
+		width: 230px;
+	}
+	#send_btn {
+		margin: 10px 0 0 300px;
+		font-size: 16px;
+		padding: 5px 10px;
+	}
+</style>
+<body>
+	<h3>
+		请输入信息: <input type="text" id="input_mes">
+	</h3>
+	<button id="send_btn">发送</button>
+	<div class="message_box"></div>
+	<script>
+		var input = document.querySelector('#input_mes');
+		var btn = document.querySelector('#send_btn');
+		var box = document.querySelector('.message_box');
+		btn.addEventListener('click',()=>{
+			//if(socket.readyState !== 1) return ;
+			if(input.value === ''){
+				alert('请输入内容');
+				return ;
+			}
+			socket.send(input.value);
+			input.value = '';
+		},false);
+
+
+		var socket = new WebSocket('ws://localhost:9000/server', 'subprotocol');
+		socket.onopen = function(e) {
+			console.log('websocket connection has established');
+
+		}
+
+		//send message to websocket server
+		//socket.send('hello, server');
+
+		//receive message from websocket server
+		socket.onmessage = function(e){
+			//obtain the message from server
+			var message = e.data;
+			console.log(message);
+			var node = document.createElement('p');
+			node.innerHTML = message;
+			box.appendChild(node);
+		}
+
+		//cut off the connection
+		//socket.close();
+
+		socket.onclose = function(e){
+			//do something
+		}
+
+		socket.onerror = function() {
+			console.log('socket error occurred');
+		};
+	</script>
+</body>
+</html>
