@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jinux-trigger</title>
+    <script src="./trigger.js"></script>
+</head>
+<body>
+    <h1>页面加载进来之后，等待3秒后代码触发按钮的点击事件</h1>
+    <button>点击...</button>
+</body>
+<script>
+    const btn = document.querySelector('button');
+    btn.addEventListener('click',()=>{
+        alert('点击按钮被点击了！！！');
+    },false);
+    //页面加载进来之后，等待3秒后代码触发按钮的点击
+    setTimeout(()=>{
+        jinuxTrigger(btn,'click');
+    },3000);
+</script>
+</html>
