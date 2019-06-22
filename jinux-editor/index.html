@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>mobile-edit</title>
+  <link rel="stylesheet" href="./mobile-edit.css">
+  <script src="./mobile-edit.js"></script>
+</head>
+<body>
+  <div id="editWrap"></div>
+</body>
+<script>
+  var htmlStr = '';
+  new MobileEdit({
+    // editor的外层容器id
+    id: 'editWrap',
+    // 初始化的富文本内容
+    initContent: `abcdefg`,
+    // 获取并赋值富文本内容
+    getContent: function(val) {
+      htmlStr = val;
+    },
+    // 上传图片回调函数，files是选择的图片文件，done是上传完图片的图片路径传给这个函数并插入到富文本中
+    uploadImg: function(files,done) {
+      console.log('获取到了要上传的文件:'+ files);
+      setTimeout(function() {
+        done('https://inews.gtimg.com/newsapp_bt/0/9404297203/641');
+      }, 5000);
+    }
+  });
+
+</script>
+</html>

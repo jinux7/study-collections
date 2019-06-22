@@ -1,0 +1,113 @@
+body,ul,ol,p,h1,h2,h3,h4,h5,dl,dd,form,input,textarea,
+td,th,button,strong,em,select,video,canvas{margin:0;padding:0;}
+h1,h2,h3,h4,h5,h6{ font-weight:normal;}
+li{list-style:none;vertical-align:top;}
+table{ border-collapse:collapse;}
+textarea{resize:none;overflow:auto;}
+img{ border:none; vertical-align:middle; width:100%;}
+em,i{ font-style:normal;}
+a{ text-decoration:none;}
+a,input{
+    -webkit-appearance: none;/*屏蔽阴影*/
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+    /*ios android去除自带阴影的样式*/
+}
+a, img {
+    /* 禁止长按链接与图片弹出菜单 */
+    -webkit-touch-callout: none;
+}
+html, body {
+    /* 禁止选中文本(如无文本选中需求,此为必选项) */
+    -webkit-user-select: none;  
+    user-select: none;
+   background:#f5f5f5;
+   overflow-x:hidden;
+}
+.clear{zoom:1;}
+.clear:after{content:''; display:block; clear:both;}
+.fl{float:left;}
+.fr{float:right;}
+body{ font-family:"microsoft yahei"; font-size:14px;}
+
+#jinuxToolBar {
+  border: 1px solid #cccccc;
+  user-select: none;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+#jinuxToolBar > div {
+  display: inline-block;
+}
+#jinuxToolBar .icon {
+  width: 32px;
+  height: 32px;
+  background-size: 60%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  cursor: pointer;
+}
+#jinuxToolBar .icon:active {
+  background-color: #efefef;
+}
+#jinuxToolBar .back {
+  background-image: url('./icons/editor-undo.png');
+}
+#jinuxToolBar .forward {
+  background-image: url('./icons/editor-redo.png');
+}
+#jinuxToolBar .fontSize {
+  position: relative;
+  background-image: url('./icons/editor-font.png');
+  background-size: 55%;
+}
+#jinuxToolBar .fontSize .fontPanel {
+  display: none;
+  position: absolute;
+  text-align: center;
+  top: 30px;
+  width: 45px;
+  border: 1px solid #cccccc;
+  background-color: #ffffff;
+}
+#jinuxToolBar .fontSize .fontPanel ul li {
+  padding: 3px 10px;
+}
+#jinuxToolBar .fontSize .fontPanel ul li:hover {
+  background-color: #efefef;
+}
+#jinuxToolBar .bold {
+  background-image: url('./icons/editor-bold.png');
+  background-size: 80%;
+}
+#jinuxToolBar .bold.active {
+  background-image: url('./icons/editor-bold-active.png');
+}
+#jinuxToolBar .left {
+  background-image: url('./icons/editor-align-left.png');
+}
+#jinuxToolBar .center {
+  background-image: url('./icons/editor-align-center.png');
+}
+#jinuxToolBar .right {
+  background-image: url('./icons/editor-align-right.png');
+}
+#jinuxToolBar .upimage {
+  background-image: url('./icons/editor-image.png');
+}
+#uploadImg {
+  display: none;
+}
+
+#jinuxEditor {
+  padding: 5px;
+  border: 1px solid #cccccc;
+  border-top: 0 solid #cccccc;
+  overflow-x: hidden;
+  overflow-y: auto; 
+  outline: none;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+#jinuxEditor img {
+  max-width: 100% !important; 
+}
