@@ -13,14 +13,16 @@
 </body>
 <script>
   var htmlStr = '';
-  new MobileEdit({
+  var editor = new MobileEdit({
     // editor的外层容器id
     id: 'editWrap',
     // 初始化的富文本内容
     initContent: `abcdefg`,
-    // 获取并赋值富文本内容
-    getContent: function(val) {
-      htmlStr = val;
+    // 当editor内容变化时的回调
+    editorChange: function(val) {
+      // val是editor的内容
+      // 这里可以做一些操作，比如vue，触发$emit来向父组件传递富文本内容
+      console.log('editorChange->',val);
     },
     // 上传图片回调函数，files是选择的图片文件，done是上传完图片的图片路径传给这个函数并插入到富文本中
     uploadImg: function(files,done) {
@@ -31,5 +33,9 @@
     }
   });
 
+  // 获取富文本内容
+  setInterval(function() {
+    console.log('getTextValue->', editor.getTextValue());
+  }, 3000);
 </script>
 </html>

@@ -7,6 +7,7 @@
       height: 667
     };
     this.option = Object.assign(defaultOptioin, option);
+    this.textValue = this.option.initContent;
 
     var nEditBox = document.querySelector('#'+option.id);
     // 创建一个div editor编辑框
@@ -57,12 +58,12 @@
     // (document.getElementById('jinuxEditor')).innerHTML = this.option.initContent;
     document.getElementById('jinuxEditor').focus();
     document.execCommand('insertText', false, this.option.initContent);
-    self.option.getContent(this.option.initContent);
 
 
     // 给editor添加input事件
     nEditor.addEventListener('input', function(ev) {
-      self.option.getContent(ev.target.innerHTML);
+      self.option.editorChange(ev.target.innerHTML);
+      self.textValue = ev.target.innerHTML;
       // console.log(ev.target.innerHTML);
     }, false);
 
@@ -134,6 +135,11 @@
       console.log(this.files); 
     }, false);    
 
+  }
+
+  // 获取editor内容
+  MobileEdit.prototype.getTextValue = function() {
+    return this.textValue;
   }
 
 })(window, document)
