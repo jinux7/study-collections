@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./hammer.js"></script>
+  <!-- <script src="./vconsole.min.js"></script> -->
+  <style>
+    #myElement {
+      background: silver;
+      height: 300px;
+      text-align: center;
+      font: 30px/300px Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="myElement"></div>
+</body>
+<script>
+	// var vConsole = new VConsole();
+  var scale = 1, old_scale;
+  var myElement = document.getElementById('myElement');
+  var mc = new Hammer.Manager(myElement);
+  // pinch
+  var pinch = new Hammer.Pinch();
+  // add to the Manager
+  mc.add([pinch]);
+  // pinch事件
+  mc.on("pinchstart", function(ev) {
+    // 注意这里1
+    old_scale = scale;
+  });
+  mc.on("pinchmove", function(ev) {
+    // 注意这里2
+    scale =ev.scale + old_scale-1;
+    // myElement.style.transform = `scale(${scale})`;
+    updateTransform();
+  });
+  // 更新样式函数
+  function updateTransform() {
+    var val = [
+      `scale(${scale})`
+      // `rotate(`+deg+`deg)`
+    ];
+    myElement.style.transform = val.join(' ');
+  }
+</script>
+</html>
