@@ -1,0 +1,271 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>upload file</title>
+	<script src="./jquery.js"></script>
+</head>
+<body>
+	<style>
+.upload_area > div, .userType_area > div , .sendType_area > div {
+    border: 1px solid #DAD5D5;
+    padding: 10px 15px;
+}
+#myUploadBtn{
+    background-color:#1874D5;
+    border: none;
+    color: #ffffff;
+    padding: 5px 12px;
+}
+h3 {
+    margin: 5px 0;
+}
+.fileName {
+    margin-left: 15px;
+}
+.userType_area {} 
+.userType_area ul , .sendType_area ul {
+    overflow: hidden;
+}
+.userType_area ul li , .sendType_area ul li {
+    position: relative;
+    float: left;
+    padding: 2px 5px;
+    background-color:#1874D5;
+    color: #ffffff;
+    color: #ffffff;
+    margin: 0 10px;
+    cursor: pointer;
+}
+span.checkMark {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,.5);
+    color: #fffff;
+    text-align: center;
+}
+.text_area {}
+.text_area textarea {
+    width: 100%;
+    height: 120px;
+}
+.mes_box {
+    display: none;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    margin:0 0 0 -150px;
+    width: 300px;
+    height: 200px;
+    background-color: gray;
+    border-radius: 5px;
+    text-align: center;
+}
+.mes_box > .cancel {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 20px;
+    text-align: center;
+    line-height:23px;
+    color: #fff;
+    font-size: 25px;
+    right: 5px;
+    top: 3px;
+    border: 1px solid #fff;
+    cursor: pointer;
+}
+.mes_box > strong {
+    color: #ffffff;
+    display: inline-block;
+    margin: 70px 0;
+    font-size: 16px;
+}
+</style>
+<div class="mes_box">
+    <span class="cancel">x</span>
+    <strong></strong>
+</div>
+<input type="file" id="choosefile" style="display:none;" />
+<div class="upload_area">
+    <h3>上传文件</h3>
+    <div>
+        <button id="myUploadBtn">请选择您要上传的文件</button>  
+        <span class="fileName"></span>
+    </div>
+</div>
+
+<div class="userType_area">
+    <h3>选择用户类型</h3>
+    <div>
+        <ul>
+            <li data-code="1">余额不足</li>
+            <li data-code="2">宽带到期</li>
+            <li data-code="3">其它</li>
+        </ul>
+    </div>
+</div>
+
+<div class="sendType_area">
+    <h3>选择推送触点</h3>
+    <div>
+        <ul>
+            <li data-code="1">辽宁联通为信号</li>
+            <li data-code="2">短信</li>
+            <li data-code="3">其它</li>
+        </ul>
+    </div>
+</div>
+
+<div class="text_area">
+    <h3>输入推送需求</h3>
+    <div>
+        <textarea name="" id="" cols="30" rows="10"></textarea>
+    </div>
+</div>
+<br><br><br>
+<button id="sendFile" type="button" class="btn btn-primary bsok">提交</button>
+<script>
+(function(){
+                var isok = true , isover = false;
+            //选择文件点击事件
+                    $('#myUploadBtn').on('click',function(){
+                       (function(){
+                            return $('#choosefile')[0].click();
+                        })();
+                    });
+            //上传选择文件change事件
+                    $('#choosefile').on('change',function(){
+                        $('.fileName').text('上传的文件名：'+$(this)[0].files[0].name);
+                    });
+            //被选中函数
+                    function checkMark($el,isDan){
+                        var strNode = '<span class="checkMark">√</span>'
+                        if(isDan){
+                            if($el.data('checkMark')){
+                                $el.find('span').remove();
+                                $el.data('checkMark', false);
+                            }else{
+                                $el.siblings().data('checkMark', false).find('span').remove();
+                                $el.data('checkMark', true).append(strNode); 
+                            }
+                                  
+                        }else{
+                            if($el.data('checkMark')){
+                                $el.find('span').remove();
+                                $el.data('checkMark', false);
+                            }else{
+                                $el.data('checkMark', true).append(strNode); 
+                            }
+                        }
+                        
+                    }
+            //获取被选中的code
+                    function getCode($el){
+                        var arr = [];
+                        $el.find('li').each(function(index, el) {
+                            if($(this).data('checkMark') == true){
+                                arr.push($(this).data('code'));
+                            }
+                        });
+                        return arr;
+                    }
+            //选择用户类型添加事件
+                    $('.userType_area li').on('click',function(){
+                        checkMark($(this),true);
+                    });
+            //推送触点添加事件
+                    $('.sendType_area li').on('click',function(){
+                        checkMark($(this),false);
+                    });
+
+
+            //上传文件点击事件
+                    $('#sendFile').on('click',function(){
+                        var fd = new FormData();
+                        var upload_file = $('#choosefile')[0].files[0];
+                        var userType = getCode($('.userType_area'));
+                        var sendType = getCode($('.sendType_area'));
+                        var text = $('.text_area textarea').val();
+                        if(upload_file){
+                            var houz = /\.[^\.]+$/.exec(upload_file.name);
+                            var size = upload_file.size; 
+                        }
+                        console.log(upload_file);
+                        if(!upload_file){
+                            $('.mes_box').show();
+                            $('.mes_box strong').text('请选择一个要上传的文件');
+                            isok = false;
+                        }else if(userType.length === 0){
+                            $('.mes_box').show();
+                            $('.mes_box strong').text('请选择用户类型');
+                            isok = false;   
+                        }else if(sendType.length === 0){
+                            $('.mes_box').show();
+                            $('.mes_box strong').text('请选择推送触点');
+                            isok = false;  
+                        }else if(!text){
+                            $('.mes_box').show();
+                            $('.mes_box strong').text('请输入推送需求');
+                            isok = false;
+                        // }else if(houz[0] !== '.txt'){
+                        //     $('.mes_box').show();
+                        //     $('.mes_box strong').text('请上传以txt结尾的文件');
+                        //     isok = false;
+                        // }else if(size > 4194304){
+                        //     $('.mes_box').show();
+                        //     $('.mes_box strong').text('您上传的文件过大，请上传小于4M的文件');
+                        //     isok = false;
+                        };
+                        fd.append('userType',userType);
+                        fd.append('sendType',userType);
+                        fd.append('text',userType);
+                        fd.append('file',upload_file);
+                        if(isok){
+                            $.ajax({
+                                url:  "http://192.168.252.196:3006/upload",
+                                type: 'POST',
+                                cache: false,
+                                processData: false,
+                                contentType: false,
+                                data: fd,
+                                success:function(res){
+                                    $(".modal-content").mask("hide");
+                                    if(true){
+                                        $('.mes_box').show();
+                                        $('.mes_box strong').text('数据提交成功');
+                                        isover = true;    
+                                    }else{
+                                        $('.mes_box').show();
+                                        $('.mes_box strong').text('服务器问题，数据提交失败');
+                                    }
+                                },
+                                error:function(err){
+                                    $(".modal-content").mask("hide");
+                                    $('.mes_box').show();
+                                    $('.mes_box strong').text('由于网络原因提交失败');
+                                }
+                            });
+                            $(".modal-content").mask("show");//ajax提交数据出现loading蒙层
+                        }
+                        
+                    
+                    });
+
+            //提示框关闭按钮点击事件
+            $('.mes_box .cancel').on('click',function(){
+                $(this).parent().hide();
+                isok = true;
+                if(isover === true){
+                    $('#createModal').remove();
+                    $('.modal-backdrop.fade.in').remove();
+                }
+            });
+})();
+        
+</script>
+</body>
+</html>
