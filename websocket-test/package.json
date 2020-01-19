@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "open": "^0.0.5",
+    "open": "^7.0.0",
     "ws": "^3.3.3"
   }
 }
