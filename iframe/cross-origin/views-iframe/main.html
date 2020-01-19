@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .wrap-iframe {
+      border: 1px solid #999999;
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>这是父页面,在相同域下操作iframe页面</h1>
+  <h2>相同域下可以随意操作iframe的内容</h2>
+  <div class="wrap-iframe">
+    <iframe id="iframeId" src="./iframe.html" frameborder="0"></iframe>
+  </div>
+</body>
+<script>
+  var iframe = document.getElementById('iframeId');
+  // 注意，要想拿到iframe里body的内容，必须等到iframe完全加载之后才可以
+  iframe.onload = function() {
+    var iframe_win = iframe.contentWindow;
+    var iframe_doc = iframe.contentDocument;
+    // 改变iframe中的style
+    var iframe_div = iframe_doc.body.querySelector('.text');
+    iframe_div.style.backgroundColor = 'skyblue';
+    iframe_div.style.color = 'white';
+    // 调整iframe的高度
+    iframe.style.height = 'auto';
+    iframe.style.height = iframe_doc.body.scrollHeight+50+'px';
+  }
+</script>
+</html>

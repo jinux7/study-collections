@@ -1,0 +1,11 @@
+{
+  "name": "same-origin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "node server"
+  },
+  "author": "",
+  "license": "ISC"
+}

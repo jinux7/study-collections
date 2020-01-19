@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .wrap-iframe {
+      border: 1px solid #999999;
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>这是父页面,在跨域下操作iframe页面</h1>
+  <h2>跨域下如何随意操作iframe的内容呢？</h2>
+  <h2>答案是不能</h2>
+  <div class="wrap-iframe">
+    <iframe id="iframeId" src="http://127.0.0.1:3001/iframe.html" frameborder="0"></iframe>
+  </div>
+</body>
+<script>
+  var iframe = document.getElementById('iframeId');
+  // 注意，要想拿到iframe里body的内容，必须等到iframe完全加载之后才可以
+  iframe.onload = function() {
+    var iframe_win = iframe.contentWindow;
+    var iframe_doc = iframe.contentDocument;
+    console.log(iframe_win, iframe_doc);
+    // 改变iframe中的style
+    var iframe_div = iframe_doc.body.querySelector('.text');
+    iframe_div.style.backgroundColor = 'skyblue';
+    iframe_div.style.color = 'white';
+    // 调整iframe的高度
+    iframe.style.height = 'auto';
+    iframe.style.height = iframe_doc.body.scrollHeight+50+'px';
+  }
+</script>
+</html>
