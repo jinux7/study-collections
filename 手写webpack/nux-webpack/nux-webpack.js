@@ -51,7 +51,7 @@ function createGraph() {
   }
   return queue;
 }
-
+// 打包生成处理后的js文件
 function bundle() {
   const graph = createGraph('./src/main.js');
   let modules = ``;

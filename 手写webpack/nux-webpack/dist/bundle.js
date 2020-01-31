@@ -63,7 +63,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var b = 'bbbbb';
-alert('哈哈哈，烂白菜。');
 var _default = b;
 exports["default"] = _default;
         },
