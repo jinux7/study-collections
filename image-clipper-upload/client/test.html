@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .wrap {
+      position: relative;
+      width: 800px;
+      height: 420px;
+      border: 1px solid #000000;
+      margin: 50px auto;
+    }
+    .clip {
+      position: absolute;
+      width: 300px;
+      height: 100px;
+      border: 1px solid blue;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="clip">
+
+    </div>
+  </div>
+</body>
+<script>
+  let nWrap = document.querySelector('.wrap'),
+      nClip = document.querySelector('.clip');
+  let iMousedownX = 0,
+      iCurMouseX = 0,
+      iCurStyleX = 0,
+      bCanLeft = true,
+      bCanRight = true,
+      iLeft = nWrap.offsetLeft;
+ 
+  nClip.addEventListener('mousedown', function(ev) {
+    nClip.addEventListener('mousemove', onMove, false);
+    iMousedownX = ev.pageX;
+    iCurStyleX = getStyle(nClip, 'left', true);
+    console.log(ev.pageX, iLeft, 998);
+  }, false);
+  nClip.addEventListener('mouseup', function() {
+    nClip.removeEventListener('mousemove', onMove, false);
+  }, false);
+  function onMove(ev) {
+    if(getStyle(nClip, 'left', true)<=0) {
+      nClip.style.left = 0;
+      bCanLeft = false;
+    }
+    if(getStyle(nClip, 'left', true)>=500) {
+      nClip.style.left = 500 + 'px';
+      bCanRight = false;
+    }
+    
+    if(iCurStyleX+ev.pageX-iMousedownX>0) {
+      bCanLeft = true;
+    }
+    if(iCurStyleX+ev.pageX-iMousedownX<500) {
+      bCanRight = true;
+    }
+    if(bCanLeft&&bCanRight) {
+      nClip.style.left = iCurStyleX+ev.pageX-iMousedownX + 'px';
+    }
+    // ttt();
+  }
+
+  var ttt = throttle(function() {
+    console.log(555678);
+  }, 1000);
+
+
+  function getStyle(ele, attr, flag) {
+    return flag?
+            parseInt(window.getComputedStyle(ele, false)[attr]):
+            window.getComputedStyle(ele, false)[attr];
+  }
+
+  function throttle (callback, wait, options) {
+  var args, context
+  var opts = options || {}
+  var runFlag = false
+  var timeout = 0
+  var optLeading = 'leading' in opts ? opts.leading : true
+  var optTrailing = 'trailing' in opts ? opts.trailing : false
+  var runFn = function () {
+    runFlag = true
+    callback.apply(context, args)
+    timeout = setTimeout(endFn, wait)
+  }
+  var endFn = function () {
+    timeout = 0
+    if (!runFlag && optTrailing === true) {
+      runFn()
+    }
+  }
+  var cancelFn = function () {
+    var rest = timeout !== 0
+    clearTimeout(timeout)
+    runFlag = false
+    timeout = 0
+    return rest
+  }
+  var throttled = function () {
+    args = arguments
+    context = this
+    runFlag = false
+    if (timeout === 0) {
+      if (optLeading === true) {
+        runFn()
+      } else if (optTrailing === true) {
+        timeout = setTimeout(endFn, wait)
+      }
+    }
+  }
+  throttled.cancel = cancelFn
+  return throttled
+}
+</script>
+</html>

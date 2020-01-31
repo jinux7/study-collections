@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>image-clipper-upload</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    .wrap {
+      width: 800px;
+      overflow: hidden;
+      margin: 20px auto;
+      font-size: 0;
+    }
+    .left {
+      position: relative;
+      float: left;
+      width: 60%;
+      min-height: 200px;
+      overflow: hidden;
+      user-select: none; /*注意，这里必须加上，要不就出现拖动时出现小黑圈*/
+    }
+    .left img {
+      width: 500px;
+      user-select: none;
+    }
+    .right {
+      border: 1px solid #333333;
+      float: left;
+      width: 40%;
+      /* min-height: 200px; */
+    }
+    #img-main {
+      width: 100%;
+    }
+    #img-1 {
+      width: 100%;
+    }
+    #clip-wrap {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background-color: rgba(0,0,0,.2);
+      transform: translate(0, 0);
+      cursor: all-scroll;
+    }
+    #clip-wrap p {
+      font-size: 0;
+    }
+    #clip-wrap span {
+      position: absolute;
+      background-color: blue;
+    }
+    #clip-wrap .left-border {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      cursor: ew-resize;
+    }
+    #clip-wrap .top-border {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+    }
+    #clip-wrap .right-border {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 3px;
+      height: 100%;
+      cursor: ew-resize;
+    }
+    #clip-wrap .bottom-border {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+    }
+  </style>
+</head>
+<body>
+  <input type="file" id="input-file" />
+  <div class="wrap">
+    <div class="left" id="main-wrap">
+      <img id="img-main" src="./3.jpg" alt="">
+      <div id="clip-wrap">
+        <p>
+          <img src="" alt="" srcset="">
+        </p>
+        <span class="left-border"></span>
+        <span class="top-border"></span>
+        <span class="right-border"></span>
+        <span class="bottom-border"></span>
+      </div>
+    </div>
+    <div class="right">
+        <img id="img-1" src="" alt="">
+        <img id="img-2" src="" alt="">
+    </div>
+  </div>
+  <div>
+    <button id="btn">提交图片</button>
+  </div>
+</body>
+<script>
+  var PERCENT = 16/9;
+  var fileArr = [],
+      timer,
+      nFile = document.querySelector('#input-file'), // 文件选择节点元素
+      nImgMain = document.querySelector('#img-main'), // 主图节点元素
+      iMainImgWidth, // 主图的实际宽度
+      iMainImgHeight, // 主图的实际高度
+      nImg1 = document.querySelector('#img-1'), // 16/9压缩图片预览节点元素
+      nImg2 = document.querySelector('#img-2'), // 原图比例压缩预览节点元素
+      nBtn = document.querySelector('#btn'), // 提交按钮节点元素
+      nMainWrap = document.getElementById('main-wrap'), // main-wrap节点元素
+      nClipWrap = document.getElementById('clip-wrap'), // clip-wrap元素节点元素
+      nLeftBorder = nClipWrap.querySelector('.left-border'), // 裁剪框左边节点
+      nRightBorder = nClipWrap.querySelector('.right-border'), // 裁剪框右边节点
+      mainWrapWidth = getStyle(nMainWrap, 'width', true), // main-wrap节点的宽
+      mainWrapHeight = getStyle(nMainWrap, 'height', true), // main-wrap节点的高
+      curClipWrapWidth, // 当前clip-wrap节点的宽
+      curClipWrapHeight, // 当前clip-wrap节点的高
+      iLeft = nMainWrap.offsetLeft, // main-wrap节点在html页面的left值
+      iTop = nMainWrap.offsetTop, // main-wrap节点在html页面的top值
+      bMouseDown = false, // 鼠标是否按下
+      curMoveDir = '', // 当前按下的元素的flag
+      mainWrapMousedownX = 0, // 鼠标按下时记录的pageX
+      mainWrapMousedownY = 0, // 鼠标按下时记录的pageY
+      leftBorderOffX, // 裁剪框左边移动的距离
+      leftBorderOffY, // 暂时无用
+      rightBorderOffX, // 裁剪框右边移动的距离
+      clipWrapCurStyleLeft, // 裁剪框当前style的left
+      clipWrapCurStyleTop, // 裁剪框当前style的top
+      bCanMoveLeft = true; // 是否可以移动裁剪框
+      bCanMoveRight = true; // 是否可以移动裁剪框
+      bCanMoveTop = true; // 是否可以移动裁剪框
+      bCanMoveBottom = true; // 是否可以移动裁剪框
+   (function() {
+    let img = new Image();
+    img.src = './3.jpg';
+    img.onload = function() {
+      iMainImgWidth = img.width;
+      iMainImgHeight = img.height;
+    }
+  })();
+  // 选择文件加change事件
+  nFile.addEventListener('change', function(ev) {
+    var file = ev.target.files[0];
+    fileArr.push(file);
+    var fr = new FileReader();
+    fr.onload = function() {
+      nImgMain.setAttribute('src', this.result);
+      nImgMain.onload = function() {
+        // 图片压缩
+        var blob = compressImg(nImgMain, 0.1, nImg1);
+        fileArr.push(blob);
+      }
+    };
+    fr.readAsDataURL(file);
+  }, false);
+  // 压缩图片，返回Blob格式文件
+  function compressImg(nImg, compressVal, showImg) {
+    var nCanvas = document.createElement('canvas');
+    nCanvas.style.display = 'none';
+    document.body.appendChild(nCanvas);
+    nCanvas.width = nImg.width;
+    nCanvas.height = nImg.height;
+    var ctx = nCanvas.getContext("2d");
+    ctx.drawImage(nImg,0,0,nImg.width,nImg.height);
+    var base64Data = nCanvas.toDataURL("image/jpeg", compressVal);
+    showImg.src = base64Data;
+    // 这里对base64字符串进行处理，转化成buffer格式
+    var binaryString = atob(base64Data.split(',')[1]),
+        mimeType = base64Data.split(',')[0].match(/:(.*?);/)[1],
+        length = binaryString.length,
+        u8arr = new Uint8Array(length),
+        blob;
+    while(length--) {
+      u8arr[length] = binaryString.charCodeAt(length);
+    }
+    blob = new Blob([u8arr.buffer], {type: mimeType});
+    return blob;
+  }
+  // 显示比例的压缩图片
+  function compressImgPercent(mainWrap, clipRect, nImg, compressVal, percentVal) {
+    var nCanvas = document.createElement('canvas');
+    nCanvas.style.display = 'none';
+    document.body.appendChild(nCanvas);
+    nCanvas.width = iMainImgWidth;
+    nCanvas.height = iMainImgWidth/percentVal;
+    var ctx = nCanvas.getContext("2d");
+    return function() {
+      let per = iMainImgWidth/mainWrapWidth;
+      let clipRectWidth = getStyle(clipRect, "width", true)*per;
+      let clipRectHeight = getStyle(clipRect, "height", true)*iMainImgHeight/getStyle(nMainWrap, 'height', true);
+      let clipRectOffsetLeft = clipRect.offsetLeft; 
+      let clipRectOffsetTop = clipRect.offsetTop;  
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); 
+      ctx.drawImage(nImg,clipRectOffsetLeft*per,clipRectOffsetTop*per,clipRectWidth,clipRectHeight,
+                      0, 0, ctx.canvas.width, ctx.canvas.height);
+      // ctx.drawImage(nImg,0,0,685,568, 
+      //                 0, 0, 685, 568);
+      var base64Data = nCanvas.toDataURL("image/jpeg", compressVal);
+      return base64Data;
+    }
+  }
+  var moveShowImg;
+  setTimeout(()=> {
+    moveShowImg = compressImgPercent(nMainWrap, nClipWrap, nImgMain, 0.3, 16/9, 500);
+    nImg1.src = moveShowImg();
+  }, 1200);
+  // 提交按钮
+  nBtn.addEventListener('click', function() {
+    var formData = new FormData();
+    formData.append('file1', fileArr[0]);
+    formData.append('file2', fileArr[1]);
+    request('http://localhost:3006/upload', formData);
+  }, false);
+  // ajax
+  function request(url, data) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, false);
+    xhr.send(data);
+  }
+  // 裁剪处理
+  clip();
+  function clip() {
+    // 初始化高
+    nClipWrap.style.height = mainWrapWidth/PERCENT+'px';
+    // 阻止所有图片默认事件
+    document.querySelector('#img-main').addEventListener('contextmenu', function(ev) {
+        ev.preventDefault();
+        ev.preventDefault();
+        return false;
+      }, false);
+    document.querySelector('#img-main').addEventListener('dragstart', function(ev) {
+        ev.preventDefault();
+        ev.preventDefault();
+        return false;
+      }, false);
+    // 整个裁剪框加mousedown事件
+    nMainWrap.addEventListener('mousedown', function(ev) {
+      ev.stopPropagation();
+      mainWrapMousedownX = ev.pageX;
+      mainWrapMousedownY = ev.pageY;
+      clipWrapCurStyleLeft = getStyle(nClipWrap, 'left', true);
+      clipWrapCurStyleTop = getStyle(nClipWrap, 'top', true);
+      bMouseDown = true;
+      curMoveDir = 'main-wrap';
+    }, false);
+    // 左边线加mousedown事件
+    nLeftBorder.addEventListener('mousedown', function(ev) {
+      ev.stopPropagation();
+      mainWrapMousedownX = ev.pageX;
+      mainWrapMousedownY = ev.pageY;
+      clipWrapCurStyleLeft = getStyle(nClipWrap, 'left', true);
+      clipWrapCurStyleTop = getStyle(nClipWrap, 'top', true);
+      curClipWrapWidth = getStyle(nClipWrap, 'width', true);
+      curClipWrapHeight = getStyle(nClipWrap, 'height', true);
+      bMouseDown = true;
+      curMoveDir = 'left-border';
+    }, false);
+    // 右边线加mousedown事件
+    nRightBorder.addEventListener('mousedown', function(ev) {
+      ev.stopPropagation();
+      mainWrapMousedownX = ev.pageX;
+      mainWrapMousedownY = ev.pageY;
+      clipWrapCurStyleLeft = getStyle(nClipWrap, 'left', true);
+      clipWrapCurStyleTop = getStyle(nClipWrap, 'top', true);
+      curClipWrapWidth = getStyle(nClipWrap, 'width', true);
+      curClipWrapHeight = getStyle(nClipWrap, 'height', true);
+      bMouseDown = true;
+      curMoveDir = 'right-border';
+    }, false);
+    // 鼠标抬起
+    document.addEventListener('mouseup', function(ev) {
+      bMouseDown = false;
+      if(curMoveDir === 'left-border') {
+      }
+      if(curMoveDir === 'main-wrap') {
+      }
+    }, false);
+    // document添加mousemove事件
+    document.addEventListener('mousemove', onMove, false);
+  }
+  function onMove(ev) {
+    if(!bMouseDown) return void 0; 
+    leftBorderOffX = ev.pageX - iLeft;
+    leftBorderOffY = ev.pageY - iTop;
+    rightBorderOffX = ev.pageX - iLeft;
+    wrapOffX = ev.pageX - mainWrapMousedownX;
+    wrapOffY = ev.pageY - mainWrapMousedownY;
+    switch(curMoveDir) {
+      case 'left-border':
+        if(leftBorderOffX<=0) {
+          leftBorderOffX = 0;
+          return void 0;
+        }
+        if(leftBorderOffX>=mainWrapWidth) {
+          leftBorderOffX = mainWrapWidth;
+          return void 0;
+        }
+        nClipWrap.style.width = curClipWrapWidth - wrapOffX +'px';
+        nClipWrap.style.height = (curClipWrapWidth - wrapOffX)/PERCENT +'px';
+        nClipWrap.style.left = leftBorderOffX + 'px';
+        bCanMoveLeft = bCanMoveRight = bCanMoveTop = bCanMoveBottom = true;
+        nImg1.src = moveShowImg();
+        break;
+      case 'right-border':
+        if(rightBorderOffX>=mainWrapWidth) {
+          return void 0;
+        }
+        if(rightBorderOffX<=0) {
+          return void 0;
+        }
+        nClipWrap.style.width = curClipWrapWidth + wrapOffX +'px';
+        nClipWrap.style.height = (curClipWrapWidth + wrapOffX)/PERCENT +'px';
+        bCanMoveLeft = bCanMoveRight = bCanMoveTop = bCanMoveBottom = true;
+        nImg1.src = moveShowImg();
+        break;
+      case 'main-wrap':
+        let left = getStyle(nClipWrap, 'left', true),
+            top = getStyle(nClipWrap, 'top', true),
+            width = getStyle(nClipWrap, 'width', true),
+            height = getStyle(nClipWrap, 'height', true),
+            mainWrapHeight = getStyle(nMainWrap, 'height', true);
+        if(left<=0) {
+          bCanMoveLeft = false;
+          nClipWrap.style.left = 0;
+        }
+        if(clipWrapCurStyleLeft+wrapOffX>0) {
+          bCanMoveLeft = true;
+        }
+        if((left+width)>=mainWrapWidth) {
+          bCanMoveRight = false;
+          nClipWrap.style.left = (mainWrapWidth-width)+'px';
+        }
+        if(clipWrapCurStyleLeft+wrapOffX<mainWrapWidth-width) {
+          bCanMoveRight = true;
+        }
+        if(top<=0) {
+          bCanMoveTop = false;
+          nClipWrap.style.top = 0;
+        }
+        if(clipWrapCurStyleTop+wrapOffY>0) {
+          bCanMoveTop = true;
+        }
+        if((top+height)>=mainWrapHeight) {
+          bCanMoveBottom = false;
+          nClipWrap.style.top = mainWrapHeight-height+'px';
+        }
+        if(clipWrapCurStyleTop+wrapOffY<mainWrapHeight-getStyle(nClipWrap, 'height', true)) {
+          bCanMoveBottom = true;
+        }
+        if(bCanMoveLeft&&bCanMoveRight) {
+          nClipWrap.style.left = clipWrapCurStyleLeft + wrapOffX + 'px';
+        }
+        if(bCanMoveTop&&bCanMoveBottom) {
+          nClipWrap.style.top = clipWrapCurStyleTop + wrapOffY + 'px';
+        }
+        // if(bCanMoveRight&&(ev.pageX-mainWrapMousedownX)>0) {
+        //   bCanMoveLeft = true;
+        //   nClipWrap.style.left = clipWrapCurStyleLeft + wrapOffX + 'px';
+        // }
+        // if(bCanMoveLeft&&(ev.pageX-mainWrapMousedownX)<0) {
+        //   bCanMoveRight = true;
+        //   nClipWrap.style.left = clipWrapCurStyleLeft + wrapOffX + 'px';
+        // }
+        // if(bCanMoveTop&&(ev.pageY-mainWrapMousedownY)<0) {
+        //   bCanMoveBottom = true;
+        //   nClipWrap.style.top = clipWrapCurStyleTop + wrapOffY + 'px';
+        // }
+        // if(bCanMoveBottom&&(ev.pageY-mainWrapMousedownY)>0) {
+        //   bCanMoveTop = true;
+        //   nClipWrap.style.top = clipWrapCurStyleTop + wrapOffY + 'px';
+        // }
+        nImg1.src = moveShowImg();
+    }
+  }
+  // 工具函数
+  function getStyle(ele, attr, flag) {
+    return flag?
+            parseInt(window.getComputedStyle(ele, false)[attr]):
+            window.getComputedStyle(ele, false)[attr];
+  }
+  // 判断当前鼠标运动的方向
+  var prevX=0;
+  var prevY=0;
+  var curX=0;
+  var curY=0;
+  var dirX="";
+  var dirY="";
+  function GetHorizontalDirection(ev) {
+  prevX=curX;
+  curX=ev.pageX;
+  if (prevX>curX) {
+    dirX="left";
+  } else if (prevX < curX) {
+    dirX="right";
+  } else {
+    dirX="none";
+  }
+  return dirX;
+}
+function GetVerticalDirection(ev) {
+  prevY=curY;
+  curY=ev.pageY;
+  if (prevY>curY) {
+    dirY="up";
+  } else if (prevY < curY) {
+    dirY="down";
+  } else {
+    dirY="none";
+  }
+  return dirY;
+}
+</script>
+</html>
