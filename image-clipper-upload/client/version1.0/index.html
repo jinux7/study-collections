@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./img-clipper.css">
+  <script src="./img-clipper.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .wrap {
+      height: 500px;
+      background-color: #efefef;
+    }
+    .inner {
+      width: 60%;
+      border: 1px solid red;
+      margin: 0 auto;
+      position: relative;
+      height: 350px;;
+    }
+    .imgWrap {
+      position: absolute;
+      width: 500px;
+      top: 20px;
+      left: 0;
+      min-height: 100px;
+      background-color: aqua;
+    }
+    .preview {
+      position: absolute;
+      width: 200px;
+      right: 0;
+    }
+    #previewImg1, #previewImg2 {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <input type="file" id="selectImg" />
+  <!-- <button id="btn">获取blob</button> -->
+  <button id="submit">提交</button>
+  <div class="wrap">
+    <div class="inner">
+      <div class="imgWrap">
+
+      </div>
+      <div class="preview">
+        <img src="" alt="" id="previewImg1">
+        <img src="" alt="" id="previewImg2">
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  var nInput = document.querySelector('#selectImg');
+  // var btn = document.querySelector('#btn');
+  var submit = document.querySelector('#submit');
+  submit.addEventListener('click', function() {
+    var arr = clipper.getFliesData();
+    var formData = new FormData();
+    formData.append('file1', arr[0]);
+    formData.append('file2', arr[1]);
+    formData.append('file3', arr[2]);
+    request('http://localhost:3006/upload', formData);
+  }, false);
+  // ajax
+  function request(url, data) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, false);
+    xhr.send(data);
+  }
+  // btn.addEventListener('click', function() {
+  //   var arr = clipper.getFliesData();
+  //   console.log(arr);
+  // }, false);
+  nInput.addEventListener('change', function(ev) {
+    var file = ev.target.files[0];
+    clipper.setImg(file);
+  }, false);
+  var nImpWrap = document.querySelector('.imgWrap');
+  var nPreviewImg1 = document.querySelector('#previewImg1');
+  var nPreviewImg2 = document.querySelector('#previewImg2');
+  var clipper = new ImgClipper({
+    wrapEle: nImpWrap,
+    ratio: 16/9,
+    compressQuality: 0.3, 
+    onClipCallback: function(result) {
+      // console.log(result);
+      nPreviewImg1.src = result.imgRatio;
+      nPreviewImg2.src = result.img;
+    } 
+  });
+  // clipper.setImg('./3.jpg');
+</script>
+</html>

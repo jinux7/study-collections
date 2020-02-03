@@ -1,5 +1,7 @@
 function ImgClipper(option) {
   this.option = option;
+  this.option.ratio = this.option.ratio?this.option.ratio:16/9;
+  this.option.compressQuality = this.option.compressQuality?this.option.compressQuality:0.3;
   this.init(this.option);
 }
 
@@ -48,8 +50,8 @@ ImgClipper.prototype.init = function(option) {
     bCanMoveTop = true, // 是否可以移动裁剪框
     bCanMoveBottom = true; // 是否可以移动裁剪框
 
-  clip();
-  function clip() {
+  // clip();
+  !function clip() {
     // 初始化宽高
     nClipWrap.style.height = mainWrapWidth/ratio+'px';
     // 阻止所有图片默认事件
@@ -106,8 +108,12 @@ ImgClipper.prototype.init = function(option) {
       }
     }, false);
     // document添加mousemove事件
+    // 节流来提高性能
+    _this.throttleFn = _this.throttle(function() {
+      callbackFn(_this.getBaseCode());
+    }, 200);
     document.addEventListener('mousemove', onMove, false);
-  }
+  }();
   function onMove(ev) {
     if(!bMouseDown) return void 0; 
     leftBorderOffX = ev.pageX - iLeft;
@@ -137,7 +143,8 @@ ImgClipper.prototype.init = function(option) {
         nClipWrap.style.height = (curClipWrapWidth - wrapOffX)/ratio +'px';
         nClipWrap.style.left = leftBorderOffX + 'px';
         bCanMoveLeft = bCanMoveRight = bCanMoveTop = bCanMoveBottom = true;
-        callbackFn(_this.getBaseCode());
+        // callbackFn(_this.getBaseCode());
+        _this.throttleFn();
         break;
       case 'right-border':
         if(rightBorderOffX>=mainWrapWidth) {
@@ -154,7 +161,8 @@ ImgClipper.prototype.init = function(option) {
         nClipWrap.style.width = curClipWrapWidth + wrapOffX +'px';
         nClipWrap.style.height = (curClipWrapWidth + wrapOffX)/ratio +'px';
         bCanMoveLeft = bCanMoveRight = bCanMoveTop = bCanMoveBottom = true;
-        callbackFn(_this.getBaseCode());
+        // callbackFn(_this.getBaseCode());
+        _this.throttleFn();
         break;
       case 'main-wrap':
         let left = _this.getStyle(nClipWrap, 'left', true),
@@ -196,7 +204,8 @@ ImgClipper.prototype.init = function(option) {
         if(bCanMoveTop&&bCanMoveBottom) {
           nClipWrap.style.top = clipWrapCurStyleTop + wrapOffY + 'px';
         }
-        callbackFn(_this.getBaseCode());
+        // callbackFn(_this.getBaseCode());
+        _this.throttleFn();
     }
   }
 }
@@ -204,25 +213,33 @@ ImgClipper.prototype.init = function(option) {
 ImgClipper.prototype.setImg = function(imgFile) {
   var _this = this;
   var nImg = document.querySelector('#nux-img-main');
-  nImg.src = imgFile;
-  nImg.onload = function() {
-    _this.resetClipbox();
-  }
 
-  var img = new Image();
-  img.src = imgFile;
-  img.onload = function() {
-    _this.iMainImgWidth = img.width;
-    _this.iMainImgHeight = img.height;
-    _this.getBaseCode = _this.compressImgPercent(
-      document.getElementById('nux-main-wrap'), 
-      document.getElementById('nux-clip-wrap'), 
-      document.querySelector('#nux-img-main'),
-      0.3, 16/9, 
-      _this.getStyle(document.getElementById('nux-main-wrap'), 'width', true)
-    );
+  var fr = new FileReader();
+  fr.onload = function() {
+    nImg.src = fr.result; 
+    nImg.onload = function() {
+      _this.resetClipbox();
+    }
 
-  }
+    var img = new Image();
+    img.src = fr.result;
+    img.onload = function() {
+      _this.iMainImgWidth = img.width;
+      _this.iMainImgHeight = img.height;
+      _this.getBaseCode = _this.compressImgPercent(
+        document.getElementById('nux-main-wrap'), 
+        document.getElementById('nux-clip-wrap'), 
+        document.querySelector('#nux-img-main'),
+        _this.option.compressQuality, 
+        _this.option.ratio, 
+        _this.getStyle(document.getElementById('nux-main-wrap'), 'width', true)
+      );
+      // 马上显示裁剪预览图
+      _this.option.onClipCallback(_this.getBaseCode());
+    }
+  };
+  fr.readAsDataURL(imgFile);
+
 }
 // 裁剪框的宽高大小应该适应图片
 ImgClipper.prototype.resetClipbox = function() {
@@ -230,6 +247,8 @@ ImgClipper.prototype.resetClipbox = function() {
       nClipWrap = document.getElementById('nux-clip-wrap'), // clip-wrap元素节点元素
       width = nImgMain.width,
       height = nImgMain.height;
+  nClipWrap.style.left = 0;
+  nClipWrap.style.top = 0;
   if(width/height>this.option.ratio) {
     nClipWrap.style.height = height + 'px';
     nClipWrap.style.width = height*this.option.ratio + 'px';
@@ -278,12 +297,95 @@ ImgClipper.prototype.compressImgPercent = function(mainWrap, clipRect, nImg, com
     let clipRectWidth = _this.getStyle(clipRect, "width", true)*per;
     let clipRectHeight = _this.getStyle(clipRect, "height", true)*_this.iMainImgHeight/_this.getStyle(mainWrap, 'height', true);
     let clipRectOffsetLeft = clipRect.offsetLeft; 
-    let clipRectOffsetTop = clipRect.offsetTop;  
+    let clipRectOffsetTop = clipRect.offsetTop;
+    var result = {};
+    // 画ratio的图片
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); 
     ctx.drawImage(nImg,clipRectOffsetLeft*per,clipRectOffsetTop*per,clipRectWidth,clipRectHeight,
                     0, 0, ctx.canvas.width, ctx.canvas.height);
-    
-    var base64Data = nCanvas.toDataURL("image/jpeg", compressVal);
-    return base64Data;
+    _this.base64urlRatio = result.imgRatio = nCanvas.toDataURL("image/jpeg", compressVal);
+    // 画1:1的图片,此处影响效率，暂时不用
+    // nCanvas.width = nImg.width;
+    // nCanvas.height = nImg.height;
+    // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); 
+    // ctx.drawImage(nImg, 0, 0, nImg.width, nImg.height);
+    // result.img = nCanvas.toDataURL("image/jpeg", compressVal);
+    result.img = nImg.src;
+    return result;
   }
+}
+// 获取原图，ratio比例图，1:1图的文件blob数据
+ImgClipper.prototype.getFliesData = function() {
+  var arr = [];
+  arr.push(this.img2blob(document.querySelector('#nux-img-main')));
+  arr.push(this.img2blob(document.querySelector('#nux-img-main'), this.option.compressQuality));
+  arr.push(this.base64url2blob(this.base64urlRatio));
+  return arr;
+}
+// 将图片转化成blob
+ImgClipper.prototype.img2blob = function (nImg, compressVal) {
+  var nCanvas = document.createElement('canvas');
+  nCanvas.style.display = 'none';
+  document.body.appendChild(nCanvas);
+  nCanvas.width = nImg.width;
+  nCanvas.height = nImg.height;
+  var ctx = nCanvas.getContext("2d");
+  ctx.drawImage(nImg,0,0,nImg.width,nImg.height);
+  var base64Data = nCanvas.toDataURL("image/jpeg", compressVal);
+  var blob = this.base64url2blob(base64Data);
+  return blob;
+}
+// 将base64图片转化blob
+ImgClipper.prototype.base64url2blob = function(base64url) {
+  var binaryString = atob(base64url.split(',')[1]),
+        mimeType = base64url.split(',')[0].match(/:(.*?);/)[1],
+        length = binaryString.length,
+        u8arr = new Uint8Array(length),
+        blob;
+    while(length--) {
+      u8arr[length] = binaryString.charCodeAt(length);
+    }
+    blob = new Blob([u8arr.buffer], {type: mimeType});
+    return blob;
+}
+// 节流函数
+ImgClipper.prototype.throttle = function(callback, wait, options) {
+  var args, context
+  var opts = options || {}
+  var runFlag = false
+  var timeout = 0
+  var optLeading = 'leading' in opts ? opts.leading : true
+  var optTrailing = 'trailing' in opts ? opts.trailing : false
+  var runFn = function () {
+    runFlag = true
+    callback.apply(context, args)
+    timeout = setTimeout(endFn, wait)
+  }
+  var endFn = function () {
+    timeout = 0
+    if (!runFlag && optTrailing === true) {
+      runFn()
+    }
+  }
+  var cancelFn = function () {
+    var rest = timeout !== 0
+    clearTimeout(timeout)
+    runFlag = false
+    timeout = 0
+    return rest
+  }
+  var throttled = function () {
+    args = arguments
+    context = this
+    runFlag = false
+    if (timeout === 0) {
+      if (optLeading === true) {
+        runFn()
+      } else if (optTrailing === true) {
+        timeout = setTimeout(endFn, wait)
+      }
+    }
+  }
+  throttled.cancel = cancelFn
+  return throttled
 }
