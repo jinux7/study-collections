@@ -1,0 +1,50 @@
+#nux-img-main {
+  width: 100%;
+}
+#nux-main-wrap {
+  font-size: 0;
+  user-select: none; /*注意，这里必须加上，要不就出现拖动时出现小黑圈*/
+}
+#nux-clip-wrap {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,.2);
+  transform: translate(0, 0);
+  cursor: all-scroll;
+}
+#nux-clip-wrap span {
+  position: absolute;
+  background-color: blue;
+}
+#nux-clip-wrap .nux-left-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  cursor: ew-resize;
+}
+#nux-clip-wrap .nux-top-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+#nux-clip-wrap .nux-right-border {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3px;
+  height: 100%;
+  cursor: ew-resize;
+}
+#nux-clip-wrap .nux-bottom-border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
