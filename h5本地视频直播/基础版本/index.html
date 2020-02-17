@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <h1>获取视频头流并播放</h1>
+  <div class="content">
+    <video id="video" src=""></video>
+  </div>
+</body>
+<script>
+  var nVideo = document.getElementById('video');
+  var constraints = {
+    video: true
+  };
+  navigator.mediaDevices.getUserMedia(constraints)
+  .then(function(mediaStream) {
+    nVideo.srcObject = mediaStream;
+    video.onloadedmetadata = function() {
+      nVideo.play();
+    }
+  }); 
+</script>
+</html>
