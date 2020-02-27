@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>前端异常处理</title>
+</head>
+<body>
+  <h1>前端异常处理</h1>
+  <!-- <img id="img" src="http://jinux.top/img.png" /> -->
+</body>
+<script>
+  // 一：
+  // 1.try-catch
+/*  try {
+    let name = 'xiaoming';
+    console.log(nam);
+  } catch(e) {
+    console.log('捕获到异常：',e);
+  }
+  // 2.语法错误
+  try {
+    // let name = 'jartto;
+    console.log(nam);
+  } catch(e) {
+    console.log('捕获到异常：',e);
+  }
+  // 3.异步错误
+  try {
+    setTimeout(() => {
+      console.log(nam);
+    }, 1000)
+  } catch(e) {
+    console.log('捕获到异步异常：',e);
+  }
+*/
+  // 二：
+  // 1
+/*  window.onerror = function(message, source, lineno, colno, error) {
+    console.log('捕获到异常：',{message, source, lineno, colno, error});
+    return true;
+  }
+*/
+/*  var nImgs = document.querySelectorAll('img');
+  nImgs.forEach(item=> {
+    item.addEventListener('error', function(ev) {
+      console.log('捕获到异常：', ev);
+    }, false);
+  });
+*/
+  
+/*  window.addEventListener("unhandledrejection", function(e){
+    e.preventDefault()
+    console.log('捕获到异常：', e);
+    return true;
+  });
+  var pro = new Promise(function(resolve, reject) {
+    reject('错误');
+  });
+  // pro.catch(err=> {
+  //   console.log('promise catch 捕获：' + err);
+  // });
+*/
+  window.addEventListener('load', function () {
+    sessionStorage.setItem('good_exit', 'pending');
+    setInterval(function () {
+        sessionStorage.setItem('time_before_crash', new Date().toString());
+    }, 1000);
+  });
+
+  window.addEventListener('beforeunload', function () {
+    sessionStorage.setItem('good_exit', 'true');
+  });
+
+  console.log(sessionStorage.getItem('good_exit'), 998);
+  if(sessionStorage.getItem('good_exit') &&
+    sessionStorage.getItem('good_exit') !== 'true') {
+    /*
+        insert crash logging code here
+    */
+    alert('Hey, welcome back from your crash, looks like you crashed on: ' + sessionStorage.getItem('time_before_crash'));
+  }
+  // 正常输出
+  console.log('程序可以运行到这里');
+</script>
+</html>
