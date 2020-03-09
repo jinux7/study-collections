@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script src="./mock.js"></script>
+<script>
+  // mock.setPath('cache/static/protocol/https', {name: 'xiaoming'});
+
+  fetchData('https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/home/js/nu_instant_search_baaa58d.js');
+  // 封装的ajax请求方法
+  function fetchData(url) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('get', url, false);
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState===4&&xhr.status===200) {
+        console.log(xhr.responseText, 998);
+      }
+    }
+    xhr.send();
+  }
+</script>
+</html> 

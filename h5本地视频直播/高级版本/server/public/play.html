@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>视频观看客户端</title>
+</head>
+<body>
+  <h1>观看视频端</h1>
+  <video controls id="video" src="https://www.runoob.com/try/demo_source/movie.mp4"></video>
+</body>
+<script>
+  var nVideo = document.getElementById('video');
+  socketInit('ws://127.0.0.1:9000');
+  function socketInit(wsurl) {
+    var url = wsurl,
+        ws;
+    if ('WebSocket' in window) {  
+      ws = new WebSocket(url);  
+    } else if ('MozWebSocket' in window) {  
+      ws = new MozWebSocket(url);  
+    } else {  
+      console.log("您的浏览器不支持WebSocket。");  
+      return ;  
+    }  
+    ws.onopen = function() {  
+      console.log('socket连接成功');
+      ws.binaryType = "arraybuffer";  
+    }  
+    ws.onmessage = function(e) {  
+      // var da = new Uint8Array(e.data);
+      var da = e.data;
+      // var newBlob = new Blob([da], {type: 'video/mpeg4'}); 
+      var blob = new Blob([da],{'type':'video/webm; codecs=opus,vp8'});
+
+      var mediaSource = new MediaSource;
+      video.src = URL.createObjectURL(mediaSource);
+      mediaSource.addEventListener('sourceopen', sourceOpen)
+
+      function sourceOpen () {
+        var mediaSource = this;
+        // var sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
+        var sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
+        
+        sourceBuffer.addEventListener('updateend', function () {
+          console.log(mediaSource, 998);
+
+          mediaSource.endOfStream();
+          nVideo.play();
+        });
+        console.log(da, 998);
+        sourceBuffer.appendBuffer(da); // buf is the arraybuffer to store the video data
+      };
+    }  
+    ws.onclose = function(e) {  
+      console.log("socket closed");
+    }  
+    ws.onerror = function(e) {  
+      console.log("socket error");  
+    }  
+  }
+</script>
+</html>
