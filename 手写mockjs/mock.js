@@ -27,8 +27,9 @@ XmlMock.prototype.send = function(params) {
     }
   }
   if(path) {
-    this.responseText = mock.urlData[key];
+    this.responseText = mock.urlData[path];
     this.onreadystatechange(this);
+
   }else {
     var xhr = new XMLHttpRequestMock();
     xhr.open('get', this.url, false);

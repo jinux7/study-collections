@@ -11,16 +11,27 @@
 </body>
 <script src="./mock.js"></script>
 <script>
-  // mock.setPath('cache/static/protocol/https', {name: 'xiaoming'});
+  mock.setPath('get/小明', {name: '小明'});
+  mock.setPath('get/小红', {name: '小红'});
 
-  fetchData('https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/home/js/nu_instant_search_baaa58d.js');
+  fetchData('http://jinux.top/get/小明', function(res) {
+    console.log('小明mock数据->', res);
+  });
+  fetchData('http://jinux.top/get/小红', function(res) {
+    console.log('小红mock数据->', res);
+  });
+  // 测试真实的ajax数据，用的实际百度的一个链接
+  var testUrl = 'https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/home/js/nu_instant_search_baaa58d.js';
+  fetchData(testUrl, function(res) {
+    console.log('百度的真是数据->', res);
+  });
   // 封装的ajax请求方法
-  function fetchData(url) {
+  function fetchData(url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.open('get', url, false);
     xhr.onreadystatechange = function() {
       if(xhr.readyState===4&&xhr.status===200) {
-        console.log(xhr.responseText, 998);
+        callback(xhr.responseText);
       }
     }
     xhr.send();
