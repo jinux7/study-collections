@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <h1>generator基础班</h1>
+</body>
+<script>
+  var p1 = function() {
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve(1);
+      }, 2000);
+    });
+  }
+  var p2 = function(val) {
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve(val+2);
+      }, 2000);
+    });
+  }
+  var p3 = function(val) {
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve(val+3);
+      }, 1500);
+    });
+  }
+  var p1callback = function(res) {
+    console.log('第1个yield的callback啊->', res);
+  }
+  var p2callback = function(res) {
+    console.log('第2个yield的callback啊->', res);
+  }
+  var p3callback = function(res) {
+    console.log('第3个yield的callback啊->', res);
+  }
+
+  function *gen() {
+    var val_1 = yield p1();
+    var val_2 = yield p2(val_1);
+    var val_3 = yield p3(val_2);
+  } 
+  var g = gen();
+  window.gObj = null;
+  window.gObj_index = 0;
+  gObj = g.next();
+  gObj.value.then(function(res) {
+    console.log('第1个yield的callback啊->', res);
+    gObj = g.next(res);
+    gObj.value.then(function(res) {
+      console.log('第2个yield的callback啊->', res);
+      gObj = g.next(res);
+      gObj.value.then(function(res) {
+        console.log('第3个yield的callback啊->', res);
+      });
+    });
+  });
+
+</script>
+</html>

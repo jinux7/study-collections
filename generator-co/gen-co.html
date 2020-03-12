@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <h1>generator-co版</h1>
+</body>
+<script>
+  // p1,p2,p3是3个Promise的执行函数
+  var p1 = function() {
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve(1);
+      }, 2000);
+    });
+  }
+  var p2 = function(val) {
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve(val+2);
+      }, 2000);
+    });
+  }
+  var p3 = function(val) {
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve(val+3);
+      }, 1500);
+    });
+  }
+  // p1callback,p2callback,p3callback对应着p1,p2,p3的回调
+  var p1callback = function(res) {
+    console.log('第1个yield的callback啊->', res);
+  }
+  var p2callback = function(res) {
+    console.log('第2个yield的callback啊->', res);
+  }
+  var p3callback = function(res) {
+    console.log('第3个yield的callback啊->', res);
+  }
+  /**
+   * @desc generator的生成函数
+   * @param { Array } Promise的函数数组
+   * @retuen { Function } generator函数
+  */
+  function gen(arr) {
+    var valArr = [];
+    return function *() {
+      for(var i=0; i<arr.length; i++) {
+        valArr[i] = yield arr[i](valArr[i-1]);
+      }
+    } 
+  }
+  /**
+   * @desc 自动执行generator的next()的函数
+   * @param { Function } gen函数
+   * @param { Array } Promise函数对应的回调函数数组
+   * @param { Any } 向generator的next中传入的值
+  */
+  function co(gen, arr, res) {
+    var g = gen();
+    var gObj = null;
+    var gObj_index = 0;
+    function innerCo(g, arr, res) {
+      gObj = g.next(res);
+      if(gObj.done) return void 0;
+      gObj.value.then(function(res) {
+        arr[gObj_index++](res);  
+        if(!gObj.done) {
+          innerCo(g, arr, res);
+        }
+      });
+    }
+    innerCo(g, arr, 0);
+  }
+  // 执行co函数
+  co(gen([p1,p2,p3]), [p1callback, p2callback, p3callback], 0);
+
+</script>
+</html>
