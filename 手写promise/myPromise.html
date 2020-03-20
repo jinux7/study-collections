@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <h1>myPromise</h1>
+</body>
+<script src="./myPromise.js"></script>
+<script>
+  var p0 = new MyPromise((resolve, reject)=> {
+    setTimeout(()=> {
+      resolve('成功0');
+    }, 2000);
+  });
+  var p1 = new MyPromise((resolve, reject)=> {
+    setTimeout(()=> {
+      resolve('成功1');
+    }, 2000);
+  });
+  var p2 = new MyPromise((resolve, reject)=> {
+    setTimeout(()=> {
+      resolve('成功2');
+    }, 1000);
+  });
+  var p3 = new MyPromise((resolve, reject)=> {
+    setTimeout(()=> {
+      reject('拒绝3');
+    }, 1500);
+  });
+  p0
+  .then(value=> {
+      console.log('success0->' + value);
+    },
+    reason=> {
+      console.log('fail0->' + reason);
+    }
+  );
+  p0
+  .then(value=> {
+      console.log('success00->' + value);
+    },
+    reason=> {
+      console.log('fail00->' + reason);
+    }
+  );
+  // test MyPromise.resolve
+  MyPromise.resolve('成功')
+  .then(value=> {
+    console.log('MyPromise.resolve->' + value);
+  });
+  // test MyPromise.reject
+  MyPromise.reject('拒绝')
+  .then(null,
+    value=> {
+      console.log('MyPromise.reject->' + value);
+    }
+  );
+  // test MyPromise.all
+  MyPromise.all([p1,p2,p3])
+  .then(
+    value=> {
+      console.log('all-success->' + value);
+    },
+    reason=> {
+      console.log('all-fail->' + reason);
+    }
+  );
+  // test MyPromise.race
+  MyPromise.race([p1,p2,p3])
+  .then(
+    value=> {
+      console.log('race-success->' + value);
+    },
+    reason=> {
+      console.log('race-fail->' + reason);
+    }
+  );
+</script>
+</html>
