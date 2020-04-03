@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./style.css">
+  <title>unx-drag</title>
+</head>
+<body>
+  <div class="content">
+    <div class="left">
+      <div class="item drag1">1</div>
+      <div class="item drag2">2</div>
+    </div>
+    <div class="right"></div>
+  </div>
+</body>
+<script src="./unx-drag.js"></script>
+<script>
+ new UnxDrag('.drag1', {
+   copy: true
+ });
+ new UnxDrag('.drag2');
+ new UnxDrop('.left');
+ new UnxDrop('.right');
+</script>
+</html>

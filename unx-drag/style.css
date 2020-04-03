@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.content {
+  display: flex;
+}
+.content > div {
+  border: 1px solid #cccccc;
+  margin: 20px 10px;
+  flex: 1;
+  height: 500px;
+}
+.item {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  font-size: 28px;
+  width: 200px;
+  height: 200px;
+  margin: 10px;
+  background-color: aqua;
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    html,body {
+      /* touch-action: none; */
+      height: 100%;
+    }
+    .div, .div2 {
+      position: absolute;
+      top: 50px;
+      width: 300px;
+      height: 60%;
+      background-color: #cccccc;
+      border: .5px solid red;
+    }
+    .div2 {
+      background-color: aqua;
+    }
+  </style>
+  <script src="./jinux-finger.js"></script>
+</head>
+<body>
+  <p id="ppp"></p>
+  <div class="div"></div>
+</body>
+<script>
+  var ppp = document.querySelector('#ppp');
+  var af = new AlloyFinger('.div', {
+    touchStart: function () {
+      console.log('touchstart');
+    },
+    touchMove: function () { },
+    touchEnd:  function () {
+      // console.log('touchend');
+    },
+    touchCancel: function () { },
+    multipointStart: function () { 
+      // console.log('multipointStart');
+    },
+    multipointEnd: function () { 
+      // console.log('multipointEnd');
+    },
+    tap: function () { 
+      console.log('tap');
+    },
+    doubleTap: function () { 
+      console.log('doubleTap');
+    },
+    longTap: function () { 
+      console.log('longTap');
+    },
+    singleTap: function () { 
+      console.log('singleTap');
+    },
+    rotate: function (evt) {
+        // console.log(evt.angle);
+    },
+    pinch: function (evt) {
+        // console.log(evt.zoom);
+    },
+    pressMove: function (evt) {
+      // ppp.innerHTML = evt.deltaX;
+        // console.log(evt.deltaX);
+        // console.log(evt.deltaY);
+    },
+    swipe: function (evt) {
+        // console.log("swipe" + evt.direction);
+    }
+});
+</script>
+</html>
