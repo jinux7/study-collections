@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A simple example</title>
+    <link rel="stylesheet" href="./css/pannellum.css"/>
+    <link rel="stylesheet" href="./css/custom.css"/>
+    <script type="text/javascript" src="./js/libpannellum.js"></script>
+    <script type="text/javascript" src="./js/pannellum.js"></script>
+    <style>
+    #panorama {
+        margin: 50px auto;
+        width: 1000px;
+        height: 600px;
+    }
+    </style>
+</head>
+<body>
+
+<div id="panorama"></div>
+<script>
+var p = pannellum.viewer('panorama', {
+    "default": {
+        "firstScene": "sn",
+        "author": "Matthew Petroff",
+        "sceneFadeDuration": 1000
+    },
+    "scenes": {
+        "sn": {
+            "title": "Mason sn",
+            "hfov": 110,
+            "pitch": -3,
+            "yaw": 117,
+            "type": "equirectangular",
+            "panorama": "./img/sn.jpg",
+            "autoLoad": true,
+            "hotSpots": [
+                {
+                    "pitch": -2,
+                    "yaw": 50,
+                    "type": "scene",
+                    "text": "户外",
+                    "sceneId": "hw",
+                    "cssClass": "pnlm-hotspot-base pnlm-hotspot pnlm-sprite pnlm-scene pnlm-pointer pnlm-tooltip hwclass"
+                },
+                {
+                    "pitch": -2,
+                    "yaw": 150,
+                    "type": "scene",
+                    "text": "户外",
+                    "sceneId": "hw",
+                    "cssClass": "pnlm-hotspot-base pnlm-hotspot pnlm-sprite pnlm-scene pnlm-pointer pnlm-tooltip hwclass"
+                }
+            ]
+        },
+
+        "hw": {
+            "title": "Spring hw or Dairy",
+            "hfov": 110,
+            "yaw": 5,
+            "type": "equirectangular",
+            "panorama": "./img/hw.jpg",
+            "autoLoad": true,
+            "hotSpots": [
+                {
+                    "pitch": -0.6,
+                    "yaw": 115,
+                    "type": "scene",
+                    "text": "Mason sn",
+                    "sceneId": "sn",
+                    "targetYaw": -23,
+                    "targetPitch": 2
+                }
+            ]
+        }
+    }    
+});
+p.on('mousedown', function() {
+    console.log(55567);
+});
+</script>
+</body>
+</html>
