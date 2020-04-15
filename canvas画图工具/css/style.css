@@ -1,0 +1,154 @@
+body,ul,ol,p,h1,h2,h3,h4,h5,dl,dd,form,input,textarea,
+td,th,button,strong,em,select,video,canvas{margin:0;padding:0;}
+h1,h2,h3,h4,h5,h6{ font-weight:normal;}
+li{list-style:none;vertical-align:top;}
+table{ border-collapse:collapse;}
+textarea{resize:none;overflow:auto;}
+img{ border:none; vertical-align:middle; width:100%;}
+em,i{ font-style:normal;}
+a{ text-decoration:none;}
+a,input{
+    -webkit-appearance: none;/*屏蔽阴影*/
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+    /*ios android去除自带阴影的样式*/
+}
+a, img {
+    /* 禁止长按链接与图片弹出菜单 */
+    -webkit-touch-callout: none;
+}
+html, body {
+    /* 禁止选中文本(如无文本选中需求,此为必选项) */
+    -webkit-user-select: none;  
+    user-select: none;
+	 background:#f5f5f5;
+	 overflow-x:hidden;
+	 height: 100%;
+}
+* {
+-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+-webkit-overflow-scrolling: touch;
+}
+
+body {
+  position: relative;
+  padding-top: 50px;
+}
+.content {
+  margin: 0px auto;
+  width: 1000px;
+}
+#canvas {
+  border: 1px solid red;
+  cursor: url(../img/pencil.png) 13 23, crosshair;
+}
+.panel {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  margin-bottom: 5px;
+}
+.panel .panel-color {
+}
+.panel .panel-color {
+  display: flex;
+  align-items: center;
+}
+.panel .panel-color .current-color {
+  width: 30px;
+  height: 30px;
+  background-color: #000000;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+.panel .panel-color ul {
+  display: flex;
+}
+.panel .panel-color ul li {
+  width: 30px;
+  height: 30px;
+  background-color: #cccccc;  
+  margin: 0 3px;
+  cursor: pointer;
+} 
+.panel .panel-color ul li.white {
+  background-color: #ffffff;
+}
+.panel .panel-color ul li.red {
+  background-color: red;
+}
+.panel .panel-color ul li.yellow {
+  background-color: yellow;
+}
+.panel .panel-color ul li.blue {
+  background-color: blue;
+}
+.panel .panel-color ul li.green {
+  background-color: green;
+}
+.panel .panel-color ul li.orange {
+  background-color: orange;
+}
+.panel .panel-color ul li.pink {
+  background-color: pink;
+}
+.panel .panel-color ul li.gray {
+  background-color: gray;
+}
+.panel .panel-color ul li.black {
+  background-color: black;
+}
+.panel .panel-color ul li:active {
+  opacity: 0.3;
+}
+.panel .panel-weight {
+  margin-left: 10px;
+}
+.panel .panel-weight select {
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+}
+#pencil {
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+  background-image: url('../img/toolbar-icons.png');
+  background-position: 3px -72px;
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.3) inset;
+  background-color: #cccccc;
+}
+#eraser {
+  width: 30px;
+  height: 30px;
+  margin: 0px;
+  background-image: url('../img/toolbar-icons.png');
+  background-position: 3px -22px;
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.3) inset;
+}
+#clearCanvas {
+  padding: 0 15px;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  margin: 0 5px;
+  border-radius: 5px;
+  font-weight: lighter;
+  font-size: 13px;
+  cursor: pointer;
+}
+#download {
+  padding: 0 15px;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 5px;
+  font-weight: lighter;
+  font-size: 13px;
+  cursor: pointer;
+}
+#clearCanvas:active, #download:active {
+  background-color: #cccccc;
+}  

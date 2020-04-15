@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./css/style.css?v=1">
+  <title>canvas画图工具</title>
+</head>
+<body>
+  <div class="content">
+    <div class="panel">
+      <div class="panel-color">
+        <div class="current-color"></div>
+        <ul>
+          <li class="white"></li>
+          <li class="red"></li>
+          <li class="yellow"></li>
+          <li class="blue"></li>
+          <li class="green"></li>
+          <li class="orange"></li>
+          <li class="pink"></li>
+          <li class="gray"></li>
+          <li class="black"></li>
+        </ul>
+      </div>
+      <div class="panel-weight">
+        <select id="fontWeight">
+          <option value ="1">1</option>
+          <option value ="3">3</option>
+          <option value ="5">5</option>
+          <option value ="7">7</option>
+          <option value ="10">10</option>
+          <option value ="12">12</option>
+          <option value ="15">15</option>
+          <option value ="20">20</option>
+          <option value ="28">28</option>
+          <option value ="36">36</option>
+        </select>
+      </div>
+      <div id="pencil"></div>
+      <div id="eraser"></div>
+      <div id="clearCanvas">清空画布</div>
+      <div id="download">下载图片</div>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="canvas" width="1000px" height="600px"></canvas>
+    </div>
+  </div>
+</body>
+<script src="./js/main.js"></script>
+</html>
