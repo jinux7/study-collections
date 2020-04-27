@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="./vue.js"></script>
+  <title>手写vue</title>
+</head>
+<body>
+  <div id="app">
+    <!-- v-text -->
+    <h1 v-text="books.name1"></h1>
+    <!-- v-html -->
+    <h2 v-html="htm"></h2>
+    <!-- {{数据}} -->
+    <h3>
+      <p>{{user}}</p>
+    </h3>
+    <h4>{{books.name2}}</h4>
+    <!-- v-mode数据双向绑定 -->
+    <input type="text" v-model="user" />
+    <!-- @事件绑定 -->
+    <p>
+      <button @click="onSubmit">点击改变数据</button>
+    </p>
+    <p>
+      <button @mousemove="onMousemove">鼠标移动事件</button>
+    </p>
+  </div>
+</body>
+<script>
+  var v = new Vue({
+    el: '#app',
+    data: {
+      user: 'jerry',
+      job: 'student',
+      htm: '<button>数据html格式</button>',
+      books: {
+        name1: 'javascript权威指南',
+        name2: 'javascript高级程序设计'
+      }
+    },
+    methods: {
+      onSubmit: function(ev) {
+        v.$data.user = 'mike';
+      },
+      onMousemove(ev) {
+        console.log('mousemove-happed');
+      }
+    }
+  });
+</script>
+</html>
