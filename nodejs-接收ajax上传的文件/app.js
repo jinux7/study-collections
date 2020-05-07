@@ -83,6 +83,18 @@ app.post('/upload', function(req, res) {
 
 // });
 
+// 前端下载文件接口
+app.post('/download', function (req, res) {
+    fs.readFile('./uploadFiles/filename.xlsx', function (err, data) {
+     if (err) {
+         return console.error(err);
+     }
+     res.header("Content-Type", "application/octet-stream");
+     res.header('Content-Disposition', 'attachment; filename=filename.xlsx');
+    res.end(data);
+  });
+});
+
 app.listen(app.get('port'), function () {
     console.log( '服务器启动完成，端口为： '+app.get('port') );
 });

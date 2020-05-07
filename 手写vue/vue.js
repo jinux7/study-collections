@@ -148,5 +148,4 @@ class Compile {
     node.value = eval('vm.$data.'+epx);
   }
 }
-
 var loop = function() {}
