@@ -59,17 +59,42 @@
   const weixinName = document.querySelector('#weixinName');
   const weixinImg = document.querySelector('#weixinImg');
   const weixinCity = document.querySelector('#weixinCity');
-
+  // 分享给朋友的分享定义
+  function shareDataMsg() {
+    wx.updateAppMessageShareData({ 
+      title: '分享给朋友', // 分享标题
+      desc: '分享给朋友的测试', // 分享描述
+      link: 'http://jinux.top/weixin/wxAuthorize', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+      imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1592294949377&di=0ace3416f6f24221d6f814f0b0ebe940&imgtype=0&src=http%3A%2F%2Fimg2.imgtn.bdimg.com%2Fit%2Fu%3D1200501047%2C4041044141%26fm%3D214%26gp%3D0.jpg', // 分享图标
+      success: function () {
+        // 设置成功
+      }
+    })
+  }
+  // 分享到朋友圈的测试
+  function shareDataTimeline() {
+    wx.updateTimelineShareData({ 
+      title: '测试分享到朋友圈', // 分享标题
+      link: 'http://jinux.top/weixin/wxAuthorize', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+      imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1592294949377&di=0ace3416f6f24221d6f814f0b0ebe940&imgtype=0&src=http%3A%2F%2Fimg2.imgtn.bdimg.com%2Fit%2Fu%3D1200501047%2C4041044141%26fm%3D214%26gp%3D0.jpg', // 分享图标
+      success: function () {
+        // 设置成功
+      }
+    })
+  }
+  // 按钮添加事件
   btn_sq.addEventListener('click', function() {
     axios.get('/weixin/getJsConfig', {
       params: {
         url: window.location.href
       }
     }).then(res=> {
-      res.data.jsApiList = ['onMenuShareTimeline', 'onMenuShareAppMessage', 'getLocation', 'openLocation']
+      res.data.jsApiList = ['onMenuShareTimeline', 'onMenuShareAppMessage', 'getLocation', 'openLocation', 'updateAppMessageShareData', 'updateTimelineShareData']
       wx.config(res.data);
       wx.ready(function () {
-          console.log('wx.ready......')
+          console.log('wx.ready......');
+          shareDataMsg();
+          shareDataTimeline();
       })
     });
   }, false);
