@@ -1,0 +1,20 @@
+{
+  "name": "kkb-wechat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "co-wechat": "^2.4.0",
+    "co-wechat-api": "^3.10.0",
+    "co-wechat-oauth": "^2.0.1",
+    "koa": "^2.12.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^9.0.1",
+    "koa-static": "^5.0.0"
+  }
+}

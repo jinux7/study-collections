@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+  <script src="./axios.js"></script>
+  <script src="./vconsole.min.js"></script>
+</head>
+<body>
+  <h1>微信公众号页面</h1>
+  <button id="btn-sq">js授权</button>
+  <button id="btn-user">获取用户信息</button>
+  <button id="btn-getlocation">获取地理位置</button>
+  <button id="btn-openlocation">地图查询</button>
+  <div class="userInfo">
+    <div>
+      <span>微信名称：</span>
+      <span id="weixinName"></span>
+    </div>
+    <div>
+      <span>微信头像：</span>
+      <img id="weixinImg" src="" alt="">
+    </div>
+    <div>
+        <span>所在城市：</span>
+        <span id="weixinCity"></span>
+      </div>
+  </div>
+</body>
+<script>
+	var vConsole = new VConsole();
+  function urlQuery2Object(url) {
+    url = !url ? window.location.href : url;
+    if(url.indexOf('?') === -1) {
+        return {};
+    }
+    var search = url[0] === '?' ? url.substr(1) : url.substring(url.lastIndexOf('?') + 1);
+    if (search === '') {
+        return {};
+    }
+    search = search.split('&');
+    var query = {};
+    for (var i = 0; i < search.length; i++) {
+        var pair = search[i].split('=');
+        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+    }
+    return query;
+  }
+  var latitude, longitude;
+  const btn_sq = document.querySelector('#btn-sq');
+  const btn_user = document.querySelector('#btn-user');
+  const btn_getlocation = document.querySelector('#btn-getlocation');
+  const btn_openlocation = document.querySelector('#btn-openlocation');
+
+  const weixinName = document.querySelector('#weixinName');
+  const weixinImg = document.querySelector('#weixinImg');
+  const weixinCity = document.querySelector('#weixinCity');
+
+  btn_sq.addEventListener('click', function() {
+    axios.get('/weixin/getJsConfig', {
+      params: {
+        url: window.location.href
+      }
+    }).then(res=> {
+      res.data.jsApiList = ['onMenuShareTimeline', 'onMenuShareAppMessage', 'getLocation', 'openLocation']
+      wx.config(res.data);
+      wx.ready(function () {
+          console.log('wx.ready......')
+      })
+    });
+  }, false);
+  btn_user.addEventListener('click', function() {
+    axios.get('/weixin/getUser', {
+      params: {
+        openid: urlQuery2Object(window.location.href).openid
+      }
+    }).then(res=> {
+      weixinName.innerHTML = res.data.nickname;
+      weixinImg.setAttribute('src', res.data.headimgurl);
+      weixinCity.innerHTML = res.data.city;
+    });
+  }, false);
+  btn_getlocation.addEventListener('click', function() {
+    wx.getLocation({
+      type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+      success: function (res) {
+        latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+        longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+        var speed = res.speed; // 速度，以米/每秒计
+        var accuracy = res.accuracy; // 位置精度
+        alert(`纬度:${latitude}，经度:${longitude}，速度:${speed}，位置经度:${accuracy}`);
+      }
+    });
+  }, false);
+  btn_openlocation.addEventListener('click', function() {
+    wx.openLocation({
+    latitude: latitude || 41.69811, // 纬度，浮点数，范围为90 ~ -90
+    longitude: longitude || 123.48156, // 经度，浮点数，范围为180 ~ -180。
+    name: 'b21', // 位置名
+    address: '国际软件园b21', // 地址详情说明
+    scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
+    infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+  });
+  }, false);
+</script>
+</html>
