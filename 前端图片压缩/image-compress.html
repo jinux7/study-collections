@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>image-compress</title>
+</head>
+<body>
+  <input id="input" type="file" accept="image/*" />
+</body>
+<script>
+  let nInput = document.querySelector('#input');
+  nInput.onchange = function(ev) {
+    let file = this.files[0];
+    imgCompress({
+      file: file,
+      maxWidth: 300,
+      maxHeight: 300,
+      callback: function(dataURL) {
+        console.log(dataURL);
+      }
+    });
+  }
+  /**
+   * @desc 将图片ev.target.files[0]格式直接压缩转换成base64格式
+   * @param option.file 原图片文件
+   * @param option.maxWidth 图片需要压缩的最大宽度
+   * @param option.maxHeight 图片需要压缩的最大高度
+   * @param option.callback 回调函数，参数是dataURL
+   */
+  function imgCompress(option) {
+    var file = option.file; // 图片file
+    var maxWidth = option.maxWidth; // 图片需要压缩的最大宽度 
+    var maxHeight = option.maxHeight; // 图片需要压缩的最大高度
+    var originWidth, originHeight; // 原图片宽高
+    var targetWidth, targetHeight; // 目标图片宽高 
+    var dataURL; // 最后转化成的base64图片
+    var img = new Image();
+    var reader = new FileReader();
+    reader.readAsDataURL(file) 
+    reader.onload = function(e){ 
+      img.src = e.target.result;
+    }
+    img.onload = function() {
+      targetWidth = originWidth = img.width;
+      targetHeight = originHeight = img.height;
+      // 等比例计算超过最大限制时缩放后的图片尺寸
+      if (originWidth > maxWidth || originHeight > maxHeight) {
+        if (originWidth / originHeight > 1) {
+          // 宽图片
+          targetWidth = maxWidth;
+          targetHeight = Math.round(maxWidth * (originHeight / originWidth));
+        } else {
+          // 高图片
+          targetHeight = maxHeight;
+          targetWidth = Math.round(maxHeight * (originWidth / originHeight));
+        }
+      }
+      // 创建画布
+      var canvas = document.createElement('canvas');
+      var context = canvas.getContext('2d');
+      // 设置宽高度为等同于要压缩图片的尺寸
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+      context.clearRect(0, 0, targetWidth, targetHeight);
+      //将img绘制到画布上
+      context.drawImage(img, 0, 0, targetWidth, targetHeight);
+      dataURL = canvas.toDataURL('image/jpeg');
+      option.callback&&option.callback(dataURL);
+    }
+  }  
+</script>
+</html>
