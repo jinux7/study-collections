@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>crop-box</title>
+	<link rel="stylesheet" href="./crop.css">	
+</head>
+<body>
+	<div id="crop-box" style="position: relative; width: 500px; height: 300px; border: 1px solid #000000; margin: 30px auto;"></div> 
+</body>
+<script src="./crop.js"></script>
+<script>
+	new Crop({
+		wrapId: 'crop-box',
+		// initCropWidth: 200,
+		// initCropHeight: 100,
+		moveCallback: function(res) {
+		},
+		upCallback: function(res) {
+			console.log(res);
+		},
+	});
+</script>
+</html>

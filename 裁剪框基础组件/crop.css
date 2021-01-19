@@ -1,0 +1,68 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+#jinux-crop {
+  position: absolute;
+  cursor: all-scroll;
+  box-sizing: border-box;
+}
+#jinux-crop >div {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+#jinux-crop >div p{
+  position: absolute;
+  background-color: brown;
+}
+#jinux-crop >div p.crop-p-1 {
+  width: 100%;
+  height: 1px;
+  top: 0;
+  left: 0;
+}
+#jinux-crop >div p.crop-p-2 {
+  width: 1px;
+  height: 100%;
+  top: 0;
+  right: 0;
+}
+#jinux-crop >div p.crop-p-3 {
+  width: 100%;
+  height: 1px;
+  bottom: 0;
+  left: 0;
+}
+#jinux-crop >div p.crop-p-4 {
+  width: 1px;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+#jinux-crop >div span {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background-color: brown;
+}
+#jinux-crop >div span.crop-span-1 {
+  top: 0;
+  left: 0;
+  cursor: nw-resize;
+}
+#jinux-crop >div span.crop-span-2 {
+  top: 0;
+  right: 0;
+  cursor: sw-resize;
+}
+#jinux-crop >div span.crop-span-3 {
+  bottom: 0;
+  right: 0;
+  cursor: nw-resize;
+}
+#jinux-crop >div span.crop-span-4 {
+  bottom: 0;
+  left: 0;
+  cursor: sw-resize;
+}
