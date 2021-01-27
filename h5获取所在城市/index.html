@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>获取所在城市</title>
+</head>
+<body>
+  获取所在城市
+</body>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=BhTbTnG3DGrMlidISMHK5WuNfBr33smI"></script>
+    <script src="./vconsole.min.js"></script>
+<script>
+    new VConsole();
+    // 1
+    function fn1(cb) {
+      var geolocation = new BMap.Geolocation();
+      geolocation.getCurrentPosition(function(r){
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+          cb&&cb(r);
+        }
+        else {
+          console.log('failed'+this.getStatus());
+        }        
+      });
+    }
+    // 2
+    function fn2(cb) {
+      var myCity = new BMap.LocalCity();
+      myCity.get(cb);
+    }
+    // 3
+    function fn3(cb) {
+      var geolocation = new BMap.Geolocation();
+      geolocation.enableSDKLocation();
+      geolocation.getCurrentPosition(function(r){
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+          cb&&cb(r);
+        }
+        else {
+          console.log('failed3'+r);
+        }   
+      })
+    }
+    // 4
+    function fn4(cb) {
+      var geolocation = new BMap.Geolocation();
+      if (geolocation) {
+          geolocation.getCurrentPosition((position) => {
+            cb&&cb(position);
+          }, function (e) {
+            console.log('fn4-error');
+          }, { provider: 'baidu' });
+      }
+    }
+    fn1(function(res) {
+      console.log(res, 'fn1');
+    });
+    fn2(function(res) {
+      console.log(res, 'fn2');
+    });
+    fn3(function(res) {
+      console.log(res, 'fn3');
+    });
+    fn4(function(res) {
+      console.log(res, 'fn4');
+    });
+    // 以上4种方法推荐使用方法3
+</script>
+</html>
