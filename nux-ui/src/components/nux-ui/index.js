@@ -5,6 +5,7 @@ import Button from './packages/button'
 import Message from './packages/message'
 import PopMsg from './packages/popmsg'
 import Confirm from './packages/confirm'
+import LoadingEarth from './packages/loadingearth'
 // filters
 import capitalize from './filters/capitalize'
 // directives
@@ -17,7 +18,8 @@ const components = [
 const methods = [
   Message,
   PopMsg,
-  Confirm
+  Confirm,
+  LoadingEarth
 ]
 // 过滤器
 const filters = [

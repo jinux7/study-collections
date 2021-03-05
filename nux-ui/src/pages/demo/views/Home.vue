@@ -5,7 +5,8 @@
     <div>
       <nux-button type="" style="margin:5px;" @click="onPopMsgClick">popMsg按钮</nux-button>
       <nux-button type="primary" @click="onMessageClick">message按钮</nux-button>
-      <nux-button type="primary" @click="onConfirmClick">confirm按钮</nux-button>
+      <nux-button type="success" @click="onConfirmClick">confirm按钮</nux-button>
+      <nux-button type="warn" @click="onLoadingClick">loading按钮</nux-button>
       <h3>{{'abcdef' | capitalize}}</h3>
       <p v-base-directive:foo.a.b="baseData">base</p>
     </div>
@@ -44,6 +45,12 @@ export default {
           console.log('您点击了是按钮');
         }
       }); 
+    },
+    onLoadingClick() {
+      this.$showLoadingEarth();
+      setTimeout(()=> {
+        this.$hideLoadingEarth();
+      }, 5000);
     },
   }
 }
