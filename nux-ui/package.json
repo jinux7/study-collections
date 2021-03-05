@@ -1,0 +1,32 @@
+{
+  "name": "ttt",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "dev:uat": "vue-cli-service serve --mode uat",
+    "build:uat": "vue-cli-service build --mode uat",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@nutui/nutui": "^2.2.14",
+    "axios": "^0.21.1",
+    "core-js": "^3.6.5",
+    "px2rem-loader": "^0.1.9",
+    "vue": "^2.6.11",
+    "vue-router": "^3.5.1",
+    "vuex": "^3.6.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "node-sass": "^4.0.0",
+    "sass-loader": "^7.3.1",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
