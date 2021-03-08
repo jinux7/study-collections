@@ -1,18 +1,20 @@
 import { locale } from './locales'
 import znUS from './locales/lang/zn-CH'
 import Button from './packages/button'
+import Icon from './packages/icon'
 // methods
 import Message from './packages/message'
 import PopMsg from './packages/popmsg'
 import Confirm from './packages/confirm'
-import LoadingEarth from './packages/loadingearth'
+import LoadingEarth from './packages/loadingplane'
 // filters
 import capitalize from './filters/capitalize'
 // directives
 import baseDirective from './directives/baseDirective'
 // 组件列表
 const components = [
-  Button
+  Button,
+  Icon
 ]
 // 方法列表
 const methods = [

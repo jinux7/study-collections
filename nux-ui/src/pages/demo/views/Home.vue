@@ -8,7 +8,9 @@
       <nux-button type="success" @click="onConfirmClick">confirm按钮</nux-button>
       <nux-button type="warn" @click="onLoadingClick">loading按钮</nux-button>
       <h3>{{'abcdef' | capitalize}}</h3>
-      <p v-base-directive:foo.a.b="baseData">base</p>
+      <!-- <p v-base-directive:foo.a.b="baseData">base</p> -->
+      <span>icon:</span>
+      <nux-icon type="check" style="color:blue;font-weight:bold;font-size:50px;"></nux-icon>
     </div>
   </div>
 </template>
@@ -47,9 +49,9 @@ export default {
       }); 
     },
     onLoadingClick() {
-      this.$showLoadingEarth();
+      this.$showLoadingPlane();
       setTimeout(()=> {
-        this.$hideLoadingEarth();
+        this.$hideLoadingPlane();
       }, 5000);
     },
   }
