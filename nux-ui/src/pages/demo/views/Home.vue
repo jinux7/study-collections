@@ -11,6 +11,13 @@
       <!-- <p v-base-directive:foo.a.b="baseData">base</p> -->
       <span>icon:</span>
       <nux-icon type="check" style="color:blue;font-weight:bold;font-size:50px;"></nux-icon>
+      <nux-leftslip ref="demo1">
+        <div slot="slip-main" class="slip-main">向左滑动我</div>
+        <div slot="slipbtns" class="slipbtns">
+          <a href="javascript:;" @click="delSlipItem">删除</a>
+          <a href="javascript:;" style="background:#cccccc;">收藏</a></div
+        >
+      </nux-leftslip>
     </div>
   </div>
 </template>
@@ -54,6 +61,11 @@ export default {
         this.$hideLoadingPlane();
       }, 5000);
     },
+    // 
+    delSlipItem() {
+      // console.log(this.$refs.demo1, this.$refs.demo2);
+      this.$refs.demo1.restSlide();
+    }
   }
 }
 </script>

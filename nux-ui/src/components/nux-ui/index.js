@@ -2,6 +2,7 @@ import { locale } from './locales'
 import znUS from './locales/lang/zn-CH'
 import Button from './packages/button'
 import Icon from './packages/icon'
+import LeftSlip from './packages/leftslip'
 // methods
 import Message from './packages/message'
 import PopMsg from './packages/popmsg'
@@ -14,7 +15,8 @@ import baseDirective from './directives/baseDirective'
 // 组件列表
 const components = [
   Button,
-  Icon
+  Icon,
+  LeftSlip
 ]
 // 方法列表
 const methods = [
