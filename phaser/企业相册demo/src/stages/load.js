@@ -21,19 +21,27 @@ export default class Load extends Scene {
 					{ type: 'image', key: 'logoImg', url: logoImg },
 					{ type: 'image', key: 'processbar-wrap', url: processbarWrapImg },
 					{ type: 'image', key: 'processbar-inner', url: processbarInnerImg },
-					{ type: 'audio', key: 'bgm', url: [ bgm ] },
+					// { type: 'audio', key: 'bgm', url: [ bgm ] },
 				]
 			}
     });
   }
   preload() {
+    // 开始load页面，将html里的loading去掉
+    if(document.getElementById('loading')) document.body.removeChild(document.getElementById('loading'));
     // 当前stage的元素画好
     this.add.image(375, 667, 'bgImg');
     this.add.image(375, 100, 'logoImg');
     this.add.image(375, 667*2-120, 'processbar-wrap');
     let processbarInnerSprite = this.add.sprite(375, 667*2-120, 'processbar-inner');
     let processbarInnerSpriteWidth = processbarInnerSprite.width;
+    // 文字
+    var text = this.add.text(375, 667*2-50, "企业宣传\n企业相册展示", {fontFamily: '微软雅黑', fill: "#000", fontSize: "20px"});
+		text.setOrigin(0.5);
+    text.setAlign('center');
+
     // load所有资源
+    this.load.audio('bgm', [ bgm ]);
     this.load.image('stage1-bg', stage1BgImg);
     this.load.image('stage2-bg', stage2BgImg);
     this.load.image('stage3-bg', stage3BgImg);
@@ -46,18 +54,15 @@ export default class Load extends Scene {
 			var w = Math.floor(processbarInnerSpriteWidth * val);
       processbarInnerSprite.setCrop(0, 0, w, 100);
       if(val === 1) {
-        setTimeout(()=> {
-          this.scene.start('stage1');
-          let bgm = this.sound.add('bgm');
-          bgm.play();
-        }, 1000);
+        
       }
     }, this);
   }
   create() {
-    // 文字
-    var text = this.add.text(375, 667*2-50, "企业宣传\n企业相册展示", {fontFamily: '微软雅黑', fill: "#000", fontSize: "20px"});
-		text.setOrigin(0.5);
-    text.setAlign('center');
+    setTimeout(()=> {
+      this.scene.start('stage1');
+      let bgm = this.sound.add('bgm');
+      bgm.play();
+    }, 1000);
   }
 }
