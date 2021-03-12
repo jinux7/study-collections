@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{appId}
+  
+  script(type="text/javascript").
+    window.onload = function(){
+      wx.config({
+        debug: true,
+        appId: '#{appId}',
+        timestamp: '#{timestamp}',
+        nonceStr: '#{nonceStr}',
+        signature: 'c0126759b63eaf6a2f4e6b6c6c11eebffd732fbb',
+        jsApiList: ['openLocation'] 
+      });  
+      wx.ready(function(){
+        console.log(555);
+        //- wx.checkJsApi({
+        //-   jsApiList: ['chooseImage'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+        //-   success: function(res) {
+        //-   // 以键值对的形式返回，可用的api值true，不可用为false
+        //-   // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+        //-   console.log(res, 998);
+        //-   }
+        //- });
+      });
+      wx.error(function(res){
+        console.log('失败');
+      });
+    };
