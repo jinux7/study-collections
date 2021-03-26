@@ -7,7 +7,8 @@ import Node from './nodeClass'
 let nCreateNodeBtn = document.getElementById('createNodeBtn');
 let nCreateCommentBtn = document.getElementById('createCommentBtn');
 let nRemoveNodeBtn = document.getElementById('removeNodeBtn');
-// 创建标题
+let nDownloadBtn = document.getElementById('downloadBtn');
+// 创建标题btn
 nCreateNodeBtn.onclick = function(evt) {
   if(!config.currentNode) {
     alert('请选择一个节点');
@@ -32,8 +33,9 @@ nCreateNodeBtn.onclick = function(evt) {
   config.currentNode.children.push(newNode);
   clearAllLayers(config.stage);
   draw(root);
+  reactStageWidthHeight();
 }
-// 创建备注
+// 创建备注btn
 nCreateCommentBtn.onclick = function(evt) {
   if(!config.currentNode) {
     alert('请选择一个节点');
@@ -63,7 +65,7 @@ nCreateCommentBtn.onclick = function(evt) {
   clearAllLayers(config.stage);
   draw(root);
 }
-// 删除节点
+// 删除节点btn
 nRemoveNodeBtn.onclick = function(evt) {
   if(!config.currentNode) {
     alert('请选择一个节点');
@@ -80,6 +82,40 @@ nRemoveNodeBtn.onclick = function(evt) {
   console.log(config.currentNode);
   // config.currentNode = root;
   config.currentNodeWrap = null;
+  draw(root);
+}
+// 下载btn
+nDownloadBtn.onclick = function(evt) {
+  let dataURL = config.stage.toDataURL({ pixelRatio: 3 });
+  let link = document.createElement('a');
+  link.download = 'stage.png';
+  link.href = dataURL;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  link = null;
+}
+// 处理新添加节点后的布局
+function reactStageWidthHeight(evt) {
+  let minY = 0, maxY = 0, maxX=0;
+  getY(root);
+  function getY(root) {
+    let x = root.layer.x();
+    let y = root.layer.children[0].y();
+    x>maxX&&(maxX=x);
+    y<minY&&(minY=y);
+    y>maxY&&(maxY=y);
+    if(root.children.length > 0) {
+      root.children.forEach(item=> {
+        getY(item);
+      });
+    }
+  }
+  let stageHeight = maxY - minY;
+  config.stage.height(stageHeight + 100);
+  config.stage.width(maxX + 500);
+  root.yVal(root.y-minY);
+  clearAllLayers(config.stage);
   draw(root);
 }
 // 删除节点用，遍历所有node节点，找到当前节点的父节点

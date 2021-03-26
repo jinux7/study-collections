@@ -44,7 +44,7 @@ function drawRect(node) {
     y: node.y,
     width: node.width,
     height: node.height,
-    fill: '#cccccc',
+    fill: '#ffffff',
     shadowBlur: 2,
     cornerRadius: 10,
   });
