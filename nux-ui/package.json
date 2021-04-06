@@ -12,6 +12,7 @@
     "@nutui/nutui": "^2.2.14",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "postcss-plugin-px2rem": "^0.8.1",
     "px2rem-loader": "^0.1.9",
     "vue": "^2.6.11",
     "vue-router": "^3.5.1",
