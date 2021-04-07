@@ -9,6 +9,7 @@ import Message from './packages/message'
 import PopMsg from './packages/popmsg'
 import Confirm from './packages/confirm'
 import LoadingEarth from './packages/loadingplane'
+import SelectCity from './packages/selectcity'
 // filters
 import capitalize from './filters/capitalize'
 // directives
@@ -25,7 +26,8 @@ const methods = [
   Message,
   PopMsg,
   Confirm,
-  LoadingEarth
+  LoadingEarth,
+  SelectCity
 ]
 // 过滤器
 const filters = [

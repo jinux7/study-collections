@@ -98,6 +98,7 @@ import locale from '../../mixins/locale'
         color: #ffffff;
         background-color: #3a8dff;
         border-radius: 20px; /*no*/
+        font-size: 16px;
       }
     }
   }

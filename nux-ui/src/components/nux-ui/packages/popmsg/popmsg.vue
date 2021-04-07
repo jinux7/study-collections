@@ -47,11 +47,12 @@
     .nux-popmsg-modal-content {
       padding: 0 10px; /*no*/
       .nux-popmsg-modal-text {
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          color: red;
-          text-align: center;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: red;
+        text-align: center;
+        font-size: 13px;
       }
     }
   }

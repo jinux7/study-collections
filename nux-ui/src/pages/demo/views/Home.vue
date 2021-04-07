@@ -19,20 +19,38 @@
         </div>
       </nux-leftslip>
       <br>
-      <br>
       <Draggable></Draggable>
+      <br>
+      <nux-button type="primary" @click="onSelectCity">城市选择</nux-button>
+      <span>{{city}}</span>
     </div>
   </div>
 </template>
 
 <script>
 import Draggable from './draggable'
+import { shuffleJson } from '../../../common/util'
 export default {
   name: 'home',
   data() {
     return {
       show: true,
       baseData: 'v-base',
+      city: '',
+      cityList: {
+        'E': ['北京1', '上海', '广州', '深圳', '天津', '重庆', '武汉', '长沙', '厦门', '杭州', '南京', '成都'],
+        'B': ['北京2', '上海', '广州', '深圳', '天津', '重庆', '武汉', '长沙', '厦门', '杭州', '南京', '成都'],
+        'A': ['北京3', '上海', '广州', '深圳', '天津', '重庆', '武汉', '长沙', '厦门', '杭州', '南京', '成都'],
+        'C': ['北京4', '上海', '广州', '深圳', '天津', '重庆', '武汉', '长沙', '厦门', '杭州', '南京', '成都'],
+        'D': ['北京5', '上海', '广州', '深圳', '天津', '重庆', '武汉', '长沙', '厦门', '杭州', '南京', '成都'],
+        'F': ['北京6', '上海', '广州', '深圳', '天津', '重庆', '武汉', '长沙', '厦门', '杭州', '南京', '成都'],
+        'G': ['北京7', '上海', '广州', '深圳', '天津', '重庆', '武汉', '长沙', '厦门', '杭州', '南京', '成都'],
+        'H': ['北京8', '上海', '广州', '深圳', '天津', '重庆', '武汉', '长沙', '厦门', '杭州', '南京', '成都'],
+        'I': ['北京9', '上海', '广州', '深圳', '天津', '重庆', '武汉', '长沙', '厦门', '杭州', '南京', '成都'],
+        'J': ['北京10', '上海', '广州', '深圳', '天津', '重庆', '武汉', '长沙', '厦门', '杭州', '南京', '成都'],
+        'Z': ['北京11', '上海', '广州', '深圳', '天津', '重庆', '武汉', '长沙', '厦门', '杭州', '南京', '成都'],
+        'Y': ['北京12', '上海', '广州', '深圳', '天津', '重庆', '武汉', '长沙', '厦门', '杭州', '南京', '成都']
+      },
     }
   },
   components: {
@@ -71,6 +89,21 @@ export default {
     delSlipItem() {
       // console.log(this.$refs.demo1, this.$refs.demo2);
       this.$refs.demo1.restSlide();
+    },
+    // 城市选择
+    onSelectCity() {
+      let vm = this.$selectCity({
+        currentCity: '沈阳',
+        hotCityList: ['北京', '上海', '广州', '深圳', '天津', '重庆', '武汉', '长沙', '厦门', '杭州', '南京', '成都'],
+        cityList: this.cityList,
+        searchHandler: res=> {
+          // 注意这里，想要动态改变组件的prop，使用此方式
+          vm.cityList = shuffleJson(this.cityList); 
+        },
+        callBack: res=> {
+          this.city = res;
+        }
+      });
     }
   }
 }
