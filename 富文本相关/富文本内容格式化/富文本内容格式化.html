@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+  <p style="text-align: center;"><strong>标题</strong></p>
+  <p style="text-align: left;">购物商品编辑1.</p>
+  <p style="text-align: left;">购物商品编辑1.</p>
+  <p style="text-align: left;">购物商品编辑1.</p>
+  <p style="text-align: left;">
+    <img style="height: 348px;" src="http://172.24.102.177/2021-04-16/dd462f846262491f84bf403df63cc430.jpg"
+    alt="Smiley face" width="400" height="42" />
+  </p>
+  <p style="text-align: left;">购物商品编辑1.购物商品编辑1.</p>
+  <p style="text-align: left;">
+    <img style="height: 192px;" src="http://172.24.102.177/2021-04-16/e55c1d56ae4b45009bac4c3cca84ecea.jpg" 
+    alt="Smiley face" width="192" height="42" /></p>
+  <p style="text-align: left;">
+    <img style="height: auto;" src="http://172.24.102.177/2021-04-16/6a779bb43efd4c83abaa7efabef51c9d.png" 
+      alt="Smiley face" width="82" height="42" /></p>
+  <p style="text-align: left;">涛涛涛涛涛涛涛涛涛涛涛涛忒监控任务奖励。</p>
+</body>
+<script>
+var str = `<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+  <p style="text-align: center;"><strong>标题</strong></p>
+  <p style="text-align: left;">购物商品编辑1.</p>
+  <p style="text-align: left;">购物商品编辑2.</p>
+  <p style="text-align: left;">购物商品编辑3.</p>
+  <p style="text-align: left;">
+    <img style="height: 348px;" src="http://172.24.102.177/2021-04-16/dd462f846262491f84bf403df63cc430.jpg"
+    alt="Smiley face" width="400" height="42" />
+  </p>
+  <p style="text-align: left;">购物商品编辑4.购物商品编辑5.</p>
+  <p style="text-align: left;">
+    <img style="height: 192px;" src="http://172.24.102.177/2021-04-16/e55c1d56ae4b45009bac4c3cca84ecea.jpg" 
+    alt="Smiley face" width="192" height="42" /></p>
+  <p style="text-align: left;">
+    <img style="height: auto;" src="http://172.24.102.177/2021-04-16/6a779bb43efd4c83abaa7efabef51c9d.png" 
+      alt="Smiley face" width="82" height="42" /></p>
+  <p style="text-align: left;">涛涛涛涛涛涛涛涛涛涛涛涛忒监控任务奖励。</p>
+</body>
+</html>`;
+
+var nDiv = document.createElement('div');
+nDiv.innerHTML = str;
+var arr = [];
+getTextArr(nDiv);
+
+function getTextArr(node) {
+  var nodes = nDiv.getElementsByTagName('*');
+  for(let i=0; i<nodes.length; i++) {
+    if(nodes[i].children.length === 0) {
+      arr.push(nodes[i])
+    }
+  }
+}
+
+var formatArr = arr.map(item=> {
+  if(item.localName === 'img') {
+    return item.outerHTML;
+  }
+  return '<p>'+ item.textContent + '</p>';
+});
+console.log(formatArr);
+</script>
+</html>
