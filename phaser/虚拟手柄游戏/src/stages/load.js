@@ -8,6 +8,9 @@ import playstageBgImg from '../assets/play-stage-bg.jpg';
 import stickImg from '../assets/arcade-joystick.png';
 import stickJson from '../assets/arcade-joystick.json';
 import dudeImg from '../assets/dude.png';
+import coinImg from '../assets/coin.png';
+import starImg from '../assets/star.png';
+import bombImg from '../assets/bomb.png';
 
 export default class Load extends Scene {
   constructor() {
@@ -29,12 +32,16 @@ export default class Load extends Scene {
     // load playstage的资源
     this.load.image('playstage-bgImg', playstageBgImg);
     this.load.atlas('sticks', stickImg, stickJson);
-    this.load.spritesheet('dude', dudeImg, { frameWidth: 32*3, frameHeight: 48*3 });
+    this.load.spritesheet('dude', dudeImg, { frameWidth: 32*2, frameHeight: 48*2 });
+    this.load.spritesheet('coin', coinImg, { frameWidth: 50, frameHeight: 50 });
+    this.load.image('star', starImg);
+    this.load.image('bomb', bombImg);
     // 当前stage的元素
     this.add.image(667, 375, 'bgImg');
     this.logoAni();
     this.insertText();
     let startBtnImg = this.add.sprite(667, 375*2-200, 'startBtn').setInteractive();
+    startBtnImg.setVisible(false);
     this.add.image(667, 375*2-50, 'processbar-wrap');
     let processbarInnerSprite = this.add.sprite(667, 375*2-50, 'processbar-inner');
     let processbarInnerSpriteWidth = processbarInnerSprite.width;
@@ -52,6 +59,9 @@ export default class Load extends Scene {
 		this.load.on('progress', (val)=> {
 			var w = Math.floor(processbarInnerSpriteWidth * val);
       processbarInnerSprite.setCrop(0, 0, w, 100);
+      if(val === 1) {
+        startBtnImg.setVisible(true);
+      }
     }, this);
   }
   create() {

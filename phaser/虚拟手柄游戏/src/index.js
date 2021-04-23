@@ -26,7 +26,7 @@ window.addEventListener('load', ()=> {
           start: true
       }]
     },
-    scene: [PlayStage, Load]
+    scene: [Load, PlayStage]
   }
   const game = new Phaser.Game(gameConfig);
 });
