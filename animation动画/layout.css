@@ -1,0 +1,35 @@
+html, body {
+  height: 100%;
+}
+.wrap {
+  display: flex;
+  height: 100%;
+}
+.left-box {
+  width: 200px;
+  /* background-color: rgb(158, 204, 235); */
+}
+.left-box ul {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: rgba(0,0,0,0.8);
+  border-bottom: 1px solid #ffffff;
+}
+.left-box ul div{
+  font-size: 20px;
+  color: #ffffff;
+}
+.left-box ul li {
+  color: #eeeeee;
+}
+.right-box {
+  flex: 1;
+  position: relative;
+}
+.right-box h1 {
+  position: fixed;
+  top: 46%;
+  left: 40%;
+  color: rgb(53, 28, 117);
+  font-size: 48px;
+}

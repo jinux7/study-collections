@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>animate</title>
+    <link rel="stylesheet" href="./normalize.css">
+    <link rel="stylesheet" href="./animate.css">
+    <link rel="stylesheet" href="./layout.css">
+</head>
+<body>
+  <div class="wrap">
+    <div class="left-box"></div>
+    <div class="right-box">
+      <h1 id="dom-animate">hello animate</h1>
+    </div>
+  </div>
+</body>
+<script src="./runAnimations.js"></script>
+<script>
+  let nLeftBox = document.querySelector('.left-box');
+  let nAnimate = document.getElementById('dom-animate');
+  animateCssClassName.forEach(item => {
+    let nUl = document.createElement('ul');
+    nUl.innerHTML = `<div>${item.label}</div>`;
+    item.children.forEach(child=> {
+      let nLi = document.createElement('li');
+      nLi.innerHTML = `${child.label}`;
+      nUl.appendChild(nLi);
+      let animationsList = [
+        {
+          type: child.value,
+          duration: 1,
+          delay: 0,
+          interationCount: 1
+        }
+      ];
+      nLi.onclick = function() {
+        runAnimation(nAnimate, animationsList, false, ()=> { console.log('动画完成'); });
+      }
+    });
+    nLeftBox.appendChild(nUl);
+  });
+</script>
+</html>
