@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myJquery</title>
+    <script src="./myJquery.js"></script>
+  </head>
+<body>
+  <div id="div1">div1</div>
+  <button id="btn">click</button>
+</body>
+<script>
+  let $ = MyJquery;
+  $('#btn').on('click', function(evt) {
+    $('#div1').html('hello myJquery!')
+    .attr('name', 'div1')
+    .css({
+      color: 'red',
+      backgroundColor: '#cccccc',
+      position: 'absolute',
+      top: '200px',
+      left: '500px'
+    });
+  });
+</script>
+</html>
