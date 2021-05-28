@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面可见性监控-visibility </title>
+</head>
+<body>
+  <script>
+    // 设置隐藏属性和改变可见属性的事件的名称
+    var hidden, visibilityChange; 
+    if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support 
+      hidden = "hidden";
+      visibilityChange = "visibilitychange";
+    } else if (typeof document.msHidden !== "undefined") {
+      hidden = "msHidden";
+      visibilityChange = "msvisibilitychange";
+    } else if (typeof document.webkitHidden !== "undefined") {
+      hidden = "webkitHidden";
+      visibilityChange = "webkitvisibilitychange";
+    }
+    // 事件回调函数
+    function handleVisibilityChange() {
+      if (document[hidden]) {
+        console.log('页面hidden');
+      } else {
+        console.log('页面visible');
+      }
+    }
+    // 添加监听事件
+    document.addEventListener(visibilityChange, handleVisibilityChange, false);
+  </script>
+</body>
+</html>
