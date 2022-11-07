@@ -6,12 +6,14 @@ class Image extends NuxObject {
   public type: string = 'image';
   public _element: HTMLImageElement;
   public url: string; // 图片地址
+  public loaded: boolean = false; // 图片是否已经下载
   /** 默认通过 img 标签来绘制，因为最终都是要通过该标签绘制的 */
   constructor(options: any) {
       super(options);
       this.url = options.url || '';
       Util.loadImage(this.url).then((imgEle: HTMLImageElement) => {
         this._initElement(imgEle, options);
+        this.loaded = true;
         this.ctx&&this.render(this.ctx); // this.ctx有的话再绘制，也就是Nuxcas.add之后
       });
   }
@@ -24,26 +26,24 @@ class Image extends NuxObject {
       return this;
   }
   _initConfig(options = {}) {
-      this.setOptions(options);
-      this._setWidthHeight(options);
+    this.setOptions(options);
+    this._setWidthHeight(options);
   }
   /** 设置图像大小 */
   _setWidthHeight(options: any) {
-      this.width = 'width' in options ? options.width : this.getElement() ? this.getElement().width || 0 : 0;
-      this.height = 'height' in options ? options.height : this.getElement() ? this.getElement().height || 0 : 0;
+    this.width = 'width' in options ? options.width : this.getElement() ? this.getElement().width || 0 : 0;
+    this.height = 'height' in options ? options.height : this.getElement() ? this.getElement().height || 0 : 0;
   }
   getElement() {
-      return this._element;
+    return this._element;
   }
   /** 直接调用 drawImage 绘制图像 */
-  _render(ctx: CanvasRenderingContext2D, noTransform: boolean = false) {
-      let x, y, elementToDraw;
-
-      x = noTransform ? this.left : -this.width / 2;
-      y = noTransform ? this.top : -this.height / 2;
-
-      elementToDraw = this._element;
-      elementToDraw && ctx.drawImage(elementToDraw, x, y, this.width, this.height);
+  _render(ctx: CanvasRenderingContext2D) {
+    let x, y, elementToDraw;
+    x = -this.width / 2;
+    y = -this.height / 2;
+    elementToDraw = this._element;
+    elementToDraw && ctx.drawImage(elementToDraw, x, y, this.width, this.height);
   }
   /** 如果是根据 url 或者本地路径加载图像，本质都是取加载图片完成之后在转成 img 标签 */
   public fromURL(url: string, callback: (arg: any)=> void, imgOptions: any) {

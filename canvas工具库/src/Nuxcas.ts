@@ -31,8 +31,10 @@ class Nuxcas {
     this.clearContext(ctx);
     // 绘制所有物体
     this._objects.forEach((obj: any) => {
-      if(obj.type==='image') {
+      if(obj.type==='image' || obj.type==='svg' || obj.type==='html') {
         obj.ctx = ctx
+        // 如果图片已经下载，直接绘制
+        obj.loaded&&obj.render(ctx);
       }else {
         obj.render(ctx);
       }
