@@ -1,4 +1,5 @@
 import { anyObject } from "./type";
+import { Point } from "./Point";
 const PiBy180 = Math.PI / 180; // 写在这里相当于缓存，因为会频繁调用
 class Util {
   /** 角度转弧度，注意 canvas 中用的都是弧度，但是角度对我们来说比较直观 */
@@ -75,6 +76,101 @@ class Util {
         }
     }
     return temp;
+  }
+  /** 给元素设置样式 */
+  static setStyle(element: HTMLElement, styles) {
+    let elementStyle = element.style;
+
+    if (typeof styles === 'string') {
+        element.style.cssText += ';' + styles;
+        return styles.indexOf('opacity') > -1 ? Util.setOpacity(element, styles.match(/opacity:\s*(\d?\.?\d*)/)[1]) : element;
+    }
+    for (let property in styles) {
+        if (property === 'opacity') {
+            Util.setOpacity(element, styles[property]);
+        } else {
+            elementStyle[property] = styles[property];
+        }
+    }
+    return element;
+  }
+  static addListener(element: HTMLElement, eventName: string, handler: (e: MouseEvent)=> void) {
+    element.addEventListener<Event>(eventName, handler, false);
+  }
+  static removeListener(element: HTMLElement, eventName: string, handler: ()=> void) {
+      element.removeEventListener(eventName, handler, false);
+  }
+  /** 计算元素偏移值 */
+  static getElementOffset(element: any): object {
+    let valueT = 0,
+        valueL = 0;
+    do {
+        valueT += element.offsetTop || 0;
+        valueL += element.offsetLeft || 0;
+        element = element.offsetParent;
+    } while (element);
+    return { left: valueL, top: valueT };
+  }
+  /** 获取鼠标的点击坐标，相对于页面左上角，注意不是画布的左上角，到时候会减掉 offset */
+  static getPointer(event: Event, upperCanvasEl: HTMLCanvasElement) {
+    event || (event = window.event);
+
+    let element: HTMLElement | Document = event.target as Document | HTMLElement,
+        body = document.body || { scrollLeft: 0, scrollTop: 0 },
+        docElement = document.documentElement,
+        orgElement = element,
+        scrollLeft = 0,
+        scrollTop = 0,
+        firstFixedAncestor;
+
+    while (element && element.parentNode && !firstFixedAncestor) {
+        element = element.parentNode as Document | HTMLElement;
+        if (element !== document && Util.getElementPosition(element as HTMLElement) === 'fixed') firstFixedAncestor = element;
+
+        if (element !== document && orgElement !== upperCanvasEl && Util.getElementPosition(element as HTMLElement) === 'absolute') {
+            scrollLeft = 0;
+            scrollTop = 0;
+        } else if (element === document && orgElement !== upperCanvasEl) {
+            scrollLeft = body.scrollLeft || docElement.scrollLeft || 0;
+            scrollTop = body.scrollTop || docElement.scrollTop || 0;
+        } else {
+            scrollLeft += (element as HTMLElement).scrollLeft || 0;
+            scrollTop += (element as HTMLElement).scrollTop || 0;
+        }
+    }
+
+    return {
+        x: Util.pointerX(event) + scrollLeft,
+        y: Util.pointerY(event) + scrollTop,
+    };
+  }
+  /**
+     * 将 point 绕 origin 旋转 radians 弧度
+     * @param {Point} point 要旋转的点
+     * @param {Point} origin 旋转中心点
+     * @param {number} radians 注意 canvas 中用的都是弧度
+     * @returns
+     */
+   static rotatePoint(point: Point, origin: Point, radians: number): Point {
+    const sin = Math.sin(radians),
+        cos = Math.cos(radians);
+
+    point.subtractEquals(origin);
+
+    const rx = point.x * cos - point.y * sin;
+    const ry = point.x * sin + point.y * cos;
+
+    return new Point(rx, ry).addEquals(origin);
+  }
+  /** 获取元素position */
+  static getElementPosition(element: HTMLElement) {
+    return window.getComputedStyle(element, null).position;
+  }
+  static pointerX(event) {
+    return event.clientX || 0;
+  }
+  static pointerY(event) {
+      return event.clientY || 0;
   }
 }
 export default Util;

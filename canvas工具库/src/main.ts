@@ -28,7 +28,7 @@ const img1 = new Image({
   url: imgBeidaihe,
   width: 100,
   height: 100,
-  left: 100,
+  left: 250,
   top: 100,
   // angle: 60
 });
@@ -36,7 +36,7 @@ const img2 = new Image({
   url: 'https://p26-passport.byteacctimg.com/img/user-avatar/7470b65342454dd6699a6cf772652260~300x300.image',
   width: 200,
   height: 200,
-  left: 600,
+  left: 220,
   top: 100,
   angle: 60
 });
@@ -44,6 +44,7 @@ const circle1 = new Circle({
   top: 200,
   left: 100,
   r: 50,
+  angle: 60,
   fill: 'blue',
   stroke: 'red',
   strokeWidth: 2,
@@ -59,7 +60,7 @@ const circle2 = new Circle({
 const text1 = new Text({
   textStr: 'hello worldjkjlkjkljl你好啊啊啊啊啊啊啊',
   fontSize: 30,
-  width: 200,
+  width: 100,
   top: 250,
   left: 250,
   fill: '#cccccc',
@@ -120,12 +121,14 @@ text1.animate({
     // console.log('conplete!');
   }
 });
-nuxcas.add(circle1);
+
+nuxcas.add(img2);
+nuxcas.add(img1);
 nuxcas.add(rect1);
 nuxcas.add(rect2);
-nuxcas.add(img1);
-nuxcas.add(img2);
+
+nuxcas.add(circle1);
 nuxcas.add(circle2);
-nuxcas.add(text1);
-nuxcas.add(svg1);
-nuxcas.add(html1);
+// nuxcas.add(text1);
+// nuxcas.add(svg1);
+// nuxcas.add(html1);

@@ -9,10 +9,20 @@ class Circle extends NuxObject {
     super(options);
     this._initCircle(options);
   }
+   /** 获取当前大小，包含缩放效果 */
+   getWidth(): number {
+    return this.r * 2 * this.scaleX;
+  }
+  /** 获取当前大小，包含缩放效果 */
+  getHeight(): number {
+    return this.r * 2 * this.scaleY;
+  }
   _initCircle(options: any = {}) {
     this.r = options.r || 0;
     this.startAngle = options.startAngle || 0;
     this.endAngle = options.endAngle || 360;
+    this.width = this.getWidth();
+    this.height = this.getHeight();
   }
   /** 圆形的绘制方法 */
   _render(ctx: CanvasRenderingContext2D) {

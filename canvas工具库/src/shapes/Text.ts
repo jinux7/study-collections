@@ -37,6 +37,7 @@ class Text extends NuxObject {
         num++;
       }
     }
+    this.setHeight(+fontSize * lines.length);
     lines.forEach((str, index)=> {
       let lineHeight = index*(fontSize as number) - num*(fontSize as number)/2;
       if (this.fill) {
