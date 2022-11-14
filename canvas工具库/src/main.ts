@@ -121,14 +121,18 @@ text1.animate({
     // console.log('conplete!');
   }
 });
+// 加事件
+text1.on('dblclick', (target)=> {
+  console.log(target);
+})
 
 nuxcas.add(img2);
 nuxcas.add(img1);
 nuxcas.add(rect1);
 nuxcas.add(rect2);
 
-nuxcas.add(circle1);
-nuxcas.add(circle2);
+// nuxcas.add(circle1);
+// nuxcas.add(circle2);
 // nuxcas.add(text1);
 // nuxcas.add(svg1);
 // nuxcas.add(html1);

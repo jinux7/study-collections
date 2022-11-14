@@ -172,5 +172,52 @@ class Util {
   static pointerY(event) {
       return event.clientY || 0;
   }
+  /**
+     * 数组的最小值
+     */
+   static min(array: any[], byProperty = '') {
+    if (!array || array.length === 0) return undefined;
+
+    let i = array.length - 1,
+        result = byProperty ? array[i][byProperty] : array[i];
+
+    if (byProperty) {
+        while (i--) {
+            if (array[i][byProperty] < result) {
+                result = array[i][byProperty];
+            }
+        }
+    } else {
+        while (i--) {
+            if (array[i] < result) {
+                result = array[i];
+            }
+        }
+    }
+    return result;
+}
+/**
+ * 数组的最大值
+ */
+static max(array: any[], byProperty = '') {
+    if (!array || array.length === 0) return undefined;
+
+    let i = array.length - 1,
+        result = byProperty ? array[i][byProperty] : array[i];
+    if (byProperty) {
+        while (i--) {
+            if (array[i][byProperty] >= result) {
+                result = array[i][byProperty];
+            }
+        }
+    } else {
+        while (i--) {
+            if (array[i] >= result) {
+                result = array[i];
+            }
+        }
+    }
+    return result;
+  }
 }
 export default Util;

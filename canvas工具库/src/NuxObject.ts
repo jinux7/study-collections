@@ -3,6 +3,7 @@ import { anyObject } from './type'
 import { Point } from './Point';
 import Nuxcas from './Nuxcas';
 import { EventCenter } from './Event';
+import { Intersection } from './Intersection'
 class NuxObject extends EventCenter {
   private id: number; // 物体的id
   public nuxcas: Nuxcas; // 物体所在的Nuxcas实例
@@ -11,10 +12,14 @@ class NuxObject extends EventCenter {
   public active: boolean = false; // 是否处于激活状态
   public top: number = 0; // 位置top值，就是y
   public left: number = 0; // 位置left值，就是x
+  public originTop: number = 0; // 在组运动时保存位置用 
+  public originLeft: number = 0; // 在组运动时保存位置用
   public width: number = 0; // 物体的原始宽度
   public height: number = 0; // 物体的原始高度
   public scaleX: number = 1; // 物体当前的缩放倍数X
   public scaleY: number = 1; // 物体当前的缩放倍数y
+  public flipX: boolean = false; /** 左右镜像，比如反向拉伸控制点 */
+  public flipY: boolean = false; /** 上下镜像，比如反向拉伸控制点 */
   public angle: number = 0; // 物体当前的旋转角度
   public fill: string = 'rgb(0,0,0)'; // 物体默认填充颜色
   public stroke: string; // 物体默认描边颜色，默认无
@@ -64,6 +69,13 @@ class NuxObject extends EventCenter {
   }
   // 设置值
   set(key: string, value: any): NuxObject {
+    if (key === 'scaleX' && value < 0) {
+      this.flipX = !this.flipX;
+      value *= -1;
+    } else if (key === 'scaleY' && value < 0) {
+      this.flipY = !this.flipY;
+      value *= -1;
+    }
     this[key] = value;
     return this;
   }
@@ -113,7 +125,8 @@ class NuxObject extends EventCenter {
   transform(ctx: CanvasRenderingContext2D) {
     ctx.translate(this.left, this.top);
     ctx.rotate(Util.degreesToRadians(this.angle));
-    ctx.scale(this.scaleX, this.scaleY);
+    ctx.scale(this.scaleX * (this.flipX ? -1 : 1), this.scaleY * (this.flipY ? -1 : 1));
+    // ctx.scale(this.scaleX, this.scaleY);
   }
   /** 具体由子类来实现，因为这确实是每个子类物体所独有的 */
   _render(ctx: CanvasRenderingContext2D) {}
@@ -305,6 +318,9 @@ class NuxObject extends EventCenter {
   }
   /** 重新设置物体包围盒的边框和各个控制点，包括位置和大小 */
   setCoords(): NuxObject {
+    // 设置一下originLeft和originTop
+    this.set('originLeft', this.left);
+    this.set('originTop', this.top);
     let strokeWidth = this.strokeWidth > 1 ? this.strokeWidth : 0,
         padding = this.padding,
         radian = Util.degreesToRadians(this.angle);
@@ -752,6 +768,36 @@ class NuxObject extends EventCenter {
     // console.log(`更新缩放的物体位置:[${position.x}，${position.y}]`);
     this.set('left', position.x);
     this.set('top', position.y);
+  }
+  /**
+    * 物体与框选区域是否相交，用框选区域的四条边分别与物体的四条边求交
+    * @param {Point} selectionTL 拖蓝框选区域左上角的点
+    * @param {Point} selectionBR 拖蓝框选区域右下角的点
+    * @returns {boolean}
+    */
+  intersectsWithRect(selectionTL: Point, selectionBR: Point): boolean {
+    let oCoords = this.oCoords,
+        tl = new Point(oCoords.tl.x, oCoords.tl.y),
+        tr = new Point(oCoords.tr.x, oCoords.tr.y),
+        bl = new Point(oCoords.bl.x, oCoords.bl.y),
+        br = new Point(oCoords.br.x, oCoords.br.y);
+
+    let intersection = Intersection.intersectPolygonRectangle([tl, tr, br, bl], selectionTL, selectionBR);
+    return intersection.status === 'Intersection';
+  }
+  /**
+    * 物体是否被框选区域包含
+    * @param {Point} selectionTL 拖蓝框选区域左上角的点
+    * @param {Point} selectionBR 拖蓝框选区域右下角的点
+    * @returns {boolean}
+    */
+  isContainedWithinRect(selectionTL: Point, selectionBR: Point): boolean {
+    let oCoords = this.oCoords,
+        tl = new Point(oCoords.tl.x, oCoords.tl.y),
+        tr = new Point(oCoords.tr.x, oCoords.tr.y),
+        bl = new Point(oCoords.bl.x, oCoords.bl.y);
+
+    return tl.x > selectionTL.x && tr.x < selectionBR.x && tl.y > selectionTL.y && bl.y < selectionBR.y;
   }
 }
 export default NuxObject;
