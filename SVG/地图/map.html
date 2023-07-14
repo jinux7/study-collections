@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./assets/style.css">
+  <link rel="stylesheet" href="./assets/reset.css">
+  <script src="./assets/util.js"></script>
+</head>
+<body>
+  <div id="map-container" class="map-container">
+    <div id="map-wrap">
+      <svg id="inner-wrap" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%">
+        <g id="text-city"></g>
+        <g id="line-city"></g>
+        <g id="circle-city"></g>
+      </svg>
+      <div id="text-panel"></div>
+    </div>
+  </div>
+</body>
+<script>
+  var 
+      SCALEMAX = 3;
+      BASERATIO = [0.3, 0.67],
+      BASEWIDTH = getComputedStyle(document.querySelector('#map-wrap')).width.replace('px', ''),
+      BASEHEIGHT = getComputedStyle(document.querySelector('#map-wrap')).height.replace('px', '');
+  var nWrap = document.querySelector('#map-wrap'),
+      nContainer = document.querySelector('#map-container');
+  var downX, downY, currentScaleVal, 
+      preScrollLeft = 0, preScrollTop = 0;
+  // 画城市
+  function drawCities(cities) {
+    var nG = document.querySelector('#text-city');
+    // 清空当前组里的文本
+    while (nG.firstChild) { 
+      nG.removeChild(nG.firstChild); 
+    }
+    cities.forEach(item=> {
+      var nText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      nText.setAttribute('x', item.location[0]*BASEWIDTH);
+      nText.setAttribute('y', item.location[1]*BASEHEIGHT);
+      nText.textContent = item.name;
+      nG.appendChild(nText);
+    });
+  }
+  // 画城市span
+  function drawCitiesSpan(cities) {
+    var nG = document.querySelector('#text-panel');
+    // 清空当前组里的文本
+    while (nG.firstChild) { 
+      nG.removeChild(nG.firstChild); 
+    }
+    cities.forEach(item=> {
+      var nText = document.createElement('span');
+      nText.style.left = item.location[0]*BASEWIDTH + 'px';
+      nText.style.top = item.location[1]*BASEHEIGHT + 'px';
+      nText.textContent = item.name;
+      nG.appendChild(nText);
+    });
+  }
+  // 画线
+  function drawLines(cities) {
+    var nG = document.querySelector('#line-city');
+    // 清空当前组里的线
+    while (nG.firstChild) { 
+      nG.removeChild(nG.firstChild); 
+    }
+    var nLine = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    var points = cities.map(item=> {
+      var x = item.location[0]*BASEWIDTH;
+      var y = item.location[1]*BASEHEIGHT;
+      return x+','+y;
+    });
+    nLine.setAttribute('points', points.join(' '));
+    nG.appendChild(nLine);
+  }
+  // 画圆
+  function drawCircles(cities) {
+    var nG = document.querySelector('#circle-city');
+    // 清空当前组里的圆
+    while (nG.firstChild) { 
+      nG.removeChild(nG.firstChild); 
+    }
+    cities.forEach(item=> {
+      var nCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      nCircle.setAttribute('cx', item.location[0]*BASEWIDTH);
+      nCircle.setAttribute('cy', item.location[1]*BASEHEIGHT);
+      nCircle.setAttribute('r', item.r);
+      nCircle.setAttribute('stroke-dasharray', '1');
+      // 圆的动画
+      var animate = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+      animate.setAttribute('attributeName', 'r');
+      animate.setAttribute('repeatCount', 'indefinite');
+      animate.setAttribute('values', `${item.r};${item.r*1.05};${item.r}`);
+      animate.setAttribute('dur', 1.5);
+      nCircle.appendChild(animate);
+      nG.appendChild(nCircle);
+    });
+  }
+  // render
+  function render(arrCities) {
+    // drawCities(arrCities);
+    drawCitiesSpan(arrCities);
+    drawLines(arrCities);
+    drawCircles(arrCities);
+  }
+  // 事件处理
+  function addEvent() {
+    // 添加滚轮事件
+    nWrap.addEventListener('mousewheel', mousewheelHandler, false);
+    nWrap.addEventListener('DOMMouseScroll', mousewheelHandler, false); // firefox
+    // 添加鼠标down事件
+    nWrap.addEventListener('mousedown', mousedownHandler, false);
+  }
+  // 鼠标滚轮回调函数
+  function mousewheelHandler(ev) {
+    var delta = ev.deltaY || ev.detail; // firefox兼容写法
+    var x = ev.offsetX, y = ev.offsetY;
+    // 获取style的scale
+    var scaleVal = getScaleVal(nWrap);
+    if(delta<0) { // 滚轮上滑动
+      if(scaleVal >= SCALEMAX) {
+        nWrap.style.transform = `scale(${SCALEMAX})`;
+      }else {
+        // nWrap.style.transformOrigin = `${x/BASEWIDTH*100}% ${y/BASEHEIGHT*100}%`;
+        nWrap.style.transform = `scale(${scaleVal+=0.1})`;
+      }
+    }else { // 滚轮下滑动
+      if(scaleVal <= 1) {
+        nWrap.style.transform = `scale(1)`;
+      }else {
+        // nWrap.style.transformOrigin = `${x/BASEWIDTH*100}% ${y/BASEHEIGHT*100}%`;
+        nWrap.style.transform = `scale(${scaleVal-=0.1})`;
+      }
+    }
+    ev.preventDefault()
+  }
+  // mousedown事件回调
+  function mousedownHandler(ev) {
+    nWrap.style.cursor = 'move';
+    downX = ev.offsetX;
+    downY = ev.offsetY;
+    currentScaleVal = getScaleVal(nWrap);
+    preScrollLeft = nContainer.scrollLeft;
+    preScrollTop = nContainer.scrollTop;
+    
+    // add mousemove event
+    nWrap.addEventListener('mousemove', mousemoveHandler, false);
+    // 添加鼠标抬起事件
+    document.addEventListener('mouseup', mouseupHandler, false);
+
+  }
+  // mousemove事件回调
+  function mousemoveHandler(ev) {
+    ev.preventDefault();
+    if(currentScaleVal==1) return ;
+    var moveX = ev.offsetX - downX,
+        moveY = ev.offsetY - downY;
+    nContainer.scrollLeft = preScrollLeft - moveX;
+    nContainer.scrollTop =  preScrollTop - moveY;
+  }
+  // mouseup事件回调
+  function mouseupHandler() {
+    nWrap.style.cursor = 'auto';
+    nWrap.removeEventListener('mousemove', mousemoveHandler, false);
+    document.removeEventListener('mouseup', mouseupHandler, false);
+  }
+  window.onload = ()=> {
+    var data = [
+      {
+        name: '白云机场',
+        location: [113.3094958, 23.392492],
+        r: 50,
+      },
+      {
+        name: '北京大兴',
+        location: [116.4240655, 39.5169397],
+        r: 60,
+      },
+      {
+        name: '拉萨机场',
+        location: [90.9119034, 29.2978001],
+        r: 70,
+      },
+    ];
+    data = data.map(item=> {
+      var location = transformLocation(item.location);
+      return {
+        ...item,
+        location
+      }
+    });
+    console.log(data, 998);
+    // 执行
+    render(data);
+    addEvent();
+  }
+</script>
+</html>

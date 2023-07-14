@@ -1,0 +1,54 @@
+.map-container {
+  width: 600px;
+  height: 600px;
+  overflow: auto;
+  overflow: hidden;
+  border: 1px solid #eeecec;
+}
+#map-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-image: url('./map.svg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  transform-origin: 0 0;
+  transform: scale(1);
+  white-space:initial;
+  text-anchor:middle;
+}
+#map-wrap text {
+  font-size: 12px;
+  fill: red;
+  stroke-width: 1;
+  white-space:initial;
+  text-anchor:middle;
+}
+#map-wrap polyline {
+  fill: none;
+  stroke: red;
+  stroke-width: 1;
+  stroke-dasharray: 5;
+  animation: dashline 5s linear infinite;
+}
+#map-wrap circle {
+  fill: none;
+  stroke: blue;
+}
+@keyframes dashline {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+#text-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+#text-panel span {
+  position: absolute;
+  color: red;
+  font-size: 12px;
+}
