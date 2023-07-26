@@ -1,4 +1,5 @@
 .map-container {
+  margin: 100px;
   width: 600px;
   height: 600px;
   overflow: auto;
