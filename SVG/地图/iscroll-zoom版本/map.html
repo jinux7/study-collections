@@ -13,10 +13,11 @@
     <div id="map-wrap">
       <svg id="inner-wrap" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%">
         <g id="text-city"></g>
+        <g id="text-city-circle"></g>
         <g id="line-city"></g>
         <g id="circle-city"></g>
       </svg>
-      <div id="text-panel"></div>
+      <!-- <div id="text-panel"></div> -->
     </div>
   </div>
 </body>
@@ -42,6 +43,21 @@
       nG.appendChild(nText);
     });
   }
+  // 画城市小圆点
+  function drawCityCircle(cities) {
+    var nG = document.querySelector('#text-city-circle');
+    // 清空当前组里的文本
+    while (nG.firstChild) {
+      nG.removeChild(nG.firstChild); 
+    }
+    cities.forEach(item=> {
+      var nCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      nCircle.setAttribute('cx', item.location[0]*BASEWIDTH);
+      nCircle.setAttribute('cy', item.location[1]*BASEHEIGHT);
+      nCircle.setAttribute('r', 1);
+      nG.appendChild(nCircle);
+    });
+  }
   // 画城市span
   function drawCitiesSpan(cities) {
     var nG = document.querySelector('#text-panel');
@@ -64,16 +80,19 @@
     while (nG.firstChild) { 
       nG.removeChild(nG.firstChild); 
     }
-    var nLine = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-    var points = cities.map(item=> {
-      var x = item.location[0]*BASEWIDTH;
-      var y = item.location[1]*BASEHEIGHT;
-      return x+','+y;
+    var host = cities.host,
+        list = cities.list;
+    list.forEach(item=> {
+      var nLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      nLine.setAttribute('x1', host.location[0]*BASEWIDTH);
+      nLine.setAttribute('y1', host.location[1]*BASEHEIGHT);
+      nLine.setAttribute('x2', item.location[0]*BASEWIDTH);
+      nLine.setAttribute('y2', item.location[1]*BASEHEIGHT);
+      nLine.addEventListener('click', onClick, false);
+      nG.appendChild(nLine);
     });
-    nLine.setAttribute('points', points.join(' '));
-    nG.appendChild(nLine);
   }
-  // 画圆
+  // 画圆范围
   function drawCircles(cities) {
     var nG = document.querySelector('#circle-city');
     // 清空当前组里的圆
@@ -98,49 +117,49 @@
   }
   // render
   function render(arrCities) {
-    // drawCities(arrCities);
-    drawCitiesSpan(arrCities);
+    drawCities([...arrCities.list, arrCities.host]);
+    drawCityCircle([...arrCities.list, arrCities.host]);
     drawLines(arrCities);
-    drawCircles(arrCities);
+    // drawCircles(arrCities);
   }
   window.onload = ()=> {
     var data = [
       {
-        name: '白云机场',
-        location: [113.3094958, 23.392492],
-        r: 50,
-      },
-      {
-        name: '北京大兴',
-        location: [116.4240655, 39.5169397],
-        r: 60,
-      },
-      {
-        name: '拉萨机场',
-        location: [90.9119034, 29.2978001],
-        r: 70,
-      },
-      {
-        name: '哈尔滨机场',
-        location: [126.25, 45.6234],
-        r: 70,
-      },
-      {
-        name: '沈阳机场',
-        location: [123.499721, 41.63908],
-        r: 70,
-      },
-    ];
-    data = data.map(item=> {
-      var location = transformLocation(item.location);
-      return {
-        ...item,
-        location
+        host: {
+          name: '北京大兴',
+          // location: [0.733, 0.332],
+          location: transformLocation(convert(116.4240655, 39.5169397)),
+          r: 60,
+        },
+        list: [
+          {
+            name: '白云机场',
+            // location: [0.695, 0.71],
+            location: transformLocation(convert(113.3094958, 23.392492)),
+          },
+          {
+            name: '拉萨机场',
+            // location: [0.23, 0.53],
+            location: transformLocation(convert(90.9119034, 29.2978001)),
+          },
+          {
+            name: '哈尔滨机场',
+            location: transformLocation(convert(126.25, 45.6234)),
+          },
+          {
+            name: '沈阳机场',
+            location: transformLocation(convert(123.499721, 41.63908)),
+          },
+        ]
       }
-    });
-    console.log(data, 998);
+    ];
+    
     // 执行
-    render(data);
+    render(data[0]);
+    
+    console.log(convert(116.4240655, 39.5169397));
+    console.log(convert(123.499721, 41.63908));
+
     myScroll = new IScroll('#map-container', {
       zoom: true,
       scrollX: true,
@@ -150,6 +169,10 @@
       mouseWheel: true,
       wheelAction: 'zoom'
     });
+  }
+
+  function onClick(ev) {
+    console.log(ev instanceof PointerEvent);
   }
 </script>
 </html>

@@ -36,6 +36,7 @@
       originTranslateY = 0,
       translateX = 0,
       translateY = 0;
+  var mouseMoveFlag = 0;
   var throttleMousemoveHandler = throttle(mousemoveHandler, 16.6);
   // 画城市
   function drawCities(cities) {
@@ -108,8 +109,8 @@
   }
   // render
   function render(arrCities) {
-    // drawCities(arrCities);
-    drawCitiesSpan(arrCities);
+    drawCities(arrCities);
+    // drawCitiesSpan(arrCities);
     drawLines(arrCities);
     drawCircles(arrCities);
   }
@@ -165,6 +166,8 @@
   }
   // mousemove事件回调
   function mousemoveHandler(ev) {
+    mouseMoveFlag++;
+    if(mouseMoveFlag % 5 !== 0) return ; // 防止鼠标移动抖动
     ev.preventDefault();
     var moveX = ev.offsetX - downX,
         moveY = ev.offsetY - downY;
