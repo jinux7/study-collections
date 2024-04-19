@@ -1,0 +1,21 @@
+{
+  "name": "media_video",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/zhiyi520/media_video.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "koa": "^2.10.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0"
+  }
+}

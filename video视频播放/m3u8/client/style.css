@@ -1,0 +1,29 @@
+html, body, ul {
+  margin: 0;
+  padding: 0;
+}
+#app {
+  margin: 20px auto;
+  width: 800px;
+}
+#app video {
+  width: 100%;
+}
+ul, li {
+  list-style: none;
+}
+.video-list {
+  margin: 20px 0;
+}
+.video-list ul {
+  display: flex;
+  margin: 10px 0;
+}
+.video-list ul li {
+  margin-right: 10px;
+}
+.video-list ul li button {
+  width: 100px;
+  line-height: 20px;
+  cursor: pointer;
+}
