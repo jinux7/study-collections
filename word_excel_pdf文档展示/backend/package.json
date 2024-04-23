@@ -1,0 +1,24 @@
+{
+  "name": "m3u8-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.15.3",
+    "koa-cors": "^0.0.16",
+    "koa-route": "^4.0.1",
+    "koa-router": "^12.0.1",
+    "koa-static": "^5.0.0",
+    "mammoth": "^1.7.1",
+    "underscore": "^1.13.6",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
