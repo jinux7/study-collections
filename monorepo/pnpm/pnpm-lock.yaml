@@ -1,0 +1,34 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      loadsh:
+        specifier: ^0.0.4
+        version: 0.0.4
+
+  packages/api:
+    dependencies:
+      '@nux-monorepo/utils':
+        specifier: workspace:^
+        version: link:../utils
+
+  packages/core:
+    dependencies:
+      '@nux-monorepo/api':
+        specifier: workspace:^
+        version: link:../api
+
+  packages/utils: {}
+
+packages:
+
+  /loadsh@0.0.4:
+    resolution: {integrity: sha512-U+wLL8InpfRalWrr+0SuhWgGt10M4OyAk6G8xCYo2rwpiHtxZkWiFpjei0vO463ghW8LPCdhqQxXlMy2qicAEw==}
+    deprecated: This is a typosquat on the popular Lodash package. This is not maintained nor is the original Lodash package.
+    dev: false

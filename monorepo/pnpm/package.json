@@ -1,0 +1,16 @@
+{
+  "name": "pnpm-monorepo",
+  "version": "1.0.3",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:core": "pnpm -F @nux-monorepo/core dev",
+    "release": "node ./scripts/release.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "loadsh": "^0.0.4"
+  }
+}
