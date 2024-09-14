@@ -31,7 +31,7 @@ const createWindow = ()=> {
     injectMainWindow(win);
     win.loadURL('http://localhost:5173');
     // win.loadFile(path.resolve(__dirnameFn(import.meta.url), './dist/index.html'));
-    // win.webContents.openDevTools(); // 打开调试工具面板
+    win.webContents.openDevTools(); // 打开调试工具面板
     winState.manage(win);
     win.on('ready-to-show', ()=> {
       win.show();

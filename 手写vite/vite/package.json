@@ -1,0 +1,21 @@
+{
+  "name": "mini-vite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vue/compiler-sfc": "^3.0.0-rc.10",
+    "chokidar": "^3.6.0",
+    "connect": "^3.7.0",
+    "es-module-lexer": "^1.5.4",
+    "esbuild": "^0.23.1",
+    "magic-string": "^0.30.11",
+    "serve-static": "^1.15.0",
+    "ws": "^8.18.0"
+  }
+}
