@@ -6,6 +6,15 @@
 
 <script setup>
 import Layout from './pages/Layout.vue';
+import { getCurrentInstance } from 'vue';
+
+const { proxy } = getCurrentInstance();
+
+window.addEventListener('message', (ev) => {
+  if(ev.data.type === 'console') {
+    proxy.$store.consoleContent.push(ev.data);
+  }
+})
 </script>
 
 <style>

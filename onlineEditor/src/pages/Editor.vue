@@ -45,7 +45,7 @@ const createEditor = async (el, language) => {
   })
   // 监听失焦事件
   editor.onDidBlurEditorText(() => {
-    console.log('blur', editor.getValue())
+    // console.log('blur', editor.getValue())
   })
 
   // editor添加入数组保存

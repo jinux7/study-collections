@@ -34,7 +34,7 @@ const mainData = reactive({
 })
 
 const onRun = ()=> {
-  // proxy.$store.iframeShow = false;
+  proxy.$store.consoleContent = []; // 清空console显示
   if(proxy.$store.languageType===1) {
     proxy.$store.docContent = createHtml(proxy.$store.htmlContent, proxy.$store.javascriptContent, proxy.$store.cssContent);
   }else if(proxy.$store.languageType===2) {
@@ -69,7 +69,8 @@ const createHtml = (htmlStr='', jsStr='', cssStr='')=> {
           ${head}
       <\/head>
       <body>
-          ${body}
+        <script src="/onlineEditor/lib/console.js"><\/script>
+        ${body}
       <\/body>
       <\/html>
     `;
@@ -88,6 +89,7 @@ const createVue = (sfcStr)=> {
         <body>
           <script src="/onlineEditor/lib/vue.runtime.global.prod.js"><\/script>
           <script src="/onlineEditor/lib/vue3-sfc-loader.js"><\/script>
+          <script src="/onlineEditor/lib/console.js"><\/script>
           <script>
             /* <!-- */
             const config = {
@@ -145,6 +147,7 @@ const createVue = (sfcStr)=> {
 }
 
 const onLanguageChange = ()=> {
+  proxy.$store.consoleContent = []; // 清空console显示
   proxy.$store.docContent = createHtml();
 }
 </script>

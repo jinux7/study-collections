@@ -16,6 +16,7 @@ const create = () => {
     vueContent: templateCode.vue, // vue内容
     docContent: '', // 预览iframe的srcdoc内容
     iframeShow: true,
+    consoleContent: [], // Console组件展示内容
   });
   app.use(ElSelect)
   app.use(ElButton)
@@ -27,3 +28,4 @@ const init = () => {
   create()
 }
 init()
+
