@@ -16,7 +16,8 @@ module.exports = {
         },
         plugins: [
             new MonacoWebpackPlugin({
-                languages: ['css', 'html', 'javascript', 'less', 'pug', 'scss', 'typescript', 'coffee']
+                languages: ['css', 'html', 'javascript']
+                // languages: ['css', 'html', 'javascript', 'less', 'pug', 'scss', 'typescript', 'coffee']
             })
         ]
     }
