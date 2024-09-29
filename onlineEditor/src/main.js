@@ -9,11 +9,12 @@ import { templateCode } from '@/config/constants'
 const create = () => {
   const app = createApp(App)
   app.config.globalProperties.$store = reactive({
-    languageType: 1, // 语言类型 1:html 2:vue
+    languageType: 1, // 语言类型 1:html 2:vue 3:typescript
     htmlContent: templateCode.html, // html内容
     javascriptContent: templateCode.javascript, // javascript内容
     cssContent: templateCode.css, // css内容
     vueContent: templateCode.vue, // vue内容
+    typescriptContent: templateCode.typescript, // typescript内容
     docContent: '', // 预览iframe的srcdoc内容
     iframeShow: true,
     consoleContent: [], // Console组件展示内容

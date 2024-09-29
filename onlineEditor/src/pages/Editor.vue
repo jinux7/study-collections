@@ -5,7 +5,8 @@
       <div ref="refJs" class="js-wrap">js</div>
       <div ref="refCss" class="css-wrap">css</div>
     </div>
-    <div v-else ref="refVue" class="vue-wrap">vue</div>
+    <div v-if="$store.languageType===2" ref="refVue" class="vue-wrap">vue</div>
+    <div v-else ref="refTypescript" class="typescript-wrap">typescript</div>
   </div>
 </template>
 
@@ -19,6 +20,7 @@ const refHtml = ref(null);
 const refJs = ref(null);
 const refCss = ref(null);
 const refVue = ref(null);
+const refTypescript = ref(null);
 const editorArr = [];
 const createEditor = async (el, language) => {
   const editor = monaco.editor.create(el, {
@@ -54,7 +56,15 @@ const createEditor = async (el, language) => {
 
 // 更新编辑器文档模型
 const updateDoc = (editor, code, language) => {
-  language = language==='vue'?'html':language;
+  switch(language) {
+    case 'vue':
+      language = 'html';
+      break;
+    case 'typescript':
+      language = 'javascript';
+      break;
+  }
+  // language = language === /^(vue)|(typescript)$/.test(language)?'html':language;
   let oldModel = editor.getModel();
   let newModel = monaco.editor.createModel(code, language);
   editor.setModel(newModel);
@@ -77,6 +87,10 @@ watch(()=> proxy.$store.languageType, async ()=> {
     await nextTick(()=> {
       createEditor(refVue.value, 'vue');
     });
+  }else if(proxy.$store.languageType===3) {
+    await nextTick(()=> {
+      createEditor(refTypescript.value, 'typescript');
+    });
   }
 }, { immediate: true });
 
@@ -84,7 +98,7 @@ watch(()=> proxy.$store.languageType, async ()=> {
 
 <style lang="less" scoped>
 .editor-wrap {
-  .html-wrap, .js-wrap, .css-wrap, .vue-wrap {
+  .html-wrap, .js-wrap, .css-wrap, .vue-wrap, .typescript-wrap {
     min-height: 30vh;
     border: 1px solid #eeeeee;
     margin: 5px;

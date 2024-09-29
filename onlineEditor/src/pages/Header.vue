@@ -30,6 +30,7 @@ const mainData = reactive({
   languageList: [
     { label: 'vanilla', value: 1 },
     { label: 'vue', value: 2 },
+    { label: 'typescript', value: 3 },
   ],
 })
 
@@ -39,6 +40,8 @@ const onRun = ()=> {
     proxy.$store.docContent = createHtml(proxy.$store.htmlContent, proxy.$store.javascriptContent, proxy.$store.cssContent);
   }else if(proxy.$store.languageType===2) {
     proxy.$store.docContent = createVue(proxy.$store.vueContent);
+  }else if(proxy.$store.languageType===3) {
+    proxy.$store.docContent = createTypescript(proxy.$store.typescriptContent);
   }
   nextTick(()=> {
     // proxy.$store.iframeShow = true;
@@ -46,37 +49,33 @@ const onRun = ()=> {
 }
 
 const createHtml = (htmlStr='', jsStr='', cssStr='')=> {
-  if(proxy.$store.languageType===1) {
-    let head = `
-      <title>预览<\/title>
-      <style type="text/css">
-          ${cssStr}
-      <\/style>
-    `;
-    let jsContent = `
-      <script>
-        ${jsStr}
-      <\/script>
-    `;
-    let body = `
-      ${htmlStr}
-      ${jsContent}
-    `;
-    return `<!DOCTYPE html>
-      <html>
-      <head>
-          <meta charset="UTF-8" />
-          ${head}
-      <\/head>
-      <body>
-        <script src="/onlineEditor/lib/console.js"><\/script>
-        ${body}
-      <\/body>
-      <\/html>
-    `;
-  }else if(proxy.$store.languageType===2) {
-
-  }
+  let head = `
+    <title>预览<\/title>
+    <style type="text/css">
+        ${cssStr}
+    <\/style>
+  `;
+  let jsContent = `
+    <script>
+      ${jsStr}
+    <\/script>
+  `;
+  let body = `
+    ${htmlStr}
+    ${jsContent}
+  `;
+  return `<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8" />
+        ${head}
+    <\/head>
+    <body>
+      <script src="/onlineEditor/lib/console.js"><\/script>
+      ${body}
+    <\/body>
+    <\/html>
+  `;  
 }
 
 const createVue = (sfcStr)=> {
@@ -144,6 +143,36 @@ const createVue = (sfcStr)=> {
           <\/script>
         <\/body>
       <\/html>`;
+}
+
+const createTypescript = (tsStr)=> {
+  return `<!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="UTF-8" \/>
+        <title>预览<\/title>
+      <\/head>
+      <body>
+        <script src="/onlineEditor/lib/typescriptServices.js"><\/script>
+        <script src="/onlineEditor/lib/console.js"><\/script>
+        <script>
+          function transpile() {
+            // 创建 TypeScript 编译器选项
+            const options = {
+                target: ts.ScriptTarget.ES5,
+                module: ts.ModuleKind.CommonJS,
+                noEmitOnError: true,
+                noImplicitAny: true
+            };
+            // 使用 transpileModule 进行编译
+            const result = ts.transpileModule(\`${tsStr}\`, { compilerOptions: options });
+            // 执行es5代码
+            eval(result.outputText);
+          }
+          transpile();
+        <\/script>
+      <\/body>
+    <\/html>`;
 }
 
 const onLanguageChange = ()=> {

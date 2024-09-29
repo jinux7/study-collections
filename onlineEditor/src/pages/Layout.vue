@@ -3,7 +3,7 @@
     <Header></Header>
     <div class="content-wrap">
       <Editor></Editor>
-      <Preview></Preview>
+      <Preview v-show="$store.languageType!==3"></Preview>
       <Console></Console>
     </div>
   </div>

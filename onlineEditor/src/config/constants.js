@@ -22,6 +22,18 @@ export const templateCode = {
       color: blue;
   }
   </style>`,
+  typescript:
+  `class Animal {
+      name: string;
+      constructor(name: string) {
+          this.name = name;
+      }
+      move(distanceInMeters: number = 0) {
+          console.log(this.name+'moved'+distanceInMeters+'m.');
+      }
+  }
+  const animal = new Animal('大象');
+  animal.move(10);`,
 }
 
 export const languageMap = {
@@ -29,4 +41,5 @@ export const languageMap = {
   'javascript': 'javascriptContent',
   'css': 'cssContent',
   'vue': 'vueContent',
+  'typescript': 'typescriptContent',
 }
