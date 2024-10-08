@@ -1,5 +1,5 @@
 <template>
-  <div class="console-wrap">
+  <div class="console-wrap" v-loading="$store.loading">
     <p>Console Panel</p>
     <div class="console-item" :class="item.method" v-for="(item, index) in $store.consoleContent">
       {{ item.data }}

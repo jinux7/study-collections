@@ -14,6 +14,9 @@ window.addEventListener('message', (ev) => {
   if(ev.data.type === 'console') {
     proxy.$store.consoleContent.push(ev.data);
   }
+  if(ev.data.type === 'loading') {
+    proxy.$store.loading = false;
+  }
 })
 </script>
 

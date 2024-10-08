@@ -1,5 +1,5 @@
 <template>
-  <div class="preview-wrap">
+  <div class="preview-wrap" v-loading="$store.loading">
     <p>预览</p>
     <iframe v-if="$store.iframeShow" :srcdoc="$store.docContent" :key="$store.docContent"></iframe>
   </div>

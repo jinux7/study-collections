@@ -18,6 +18,7 @@ const create = () => {
     docContent: '', // 预览iframe的srcdoc内容
     iframeShow: true,
     consoleContent: [], // Console组件展示内容
+    loading: false
   });
   app.use(ElSelect)
   app.use(ElButton)

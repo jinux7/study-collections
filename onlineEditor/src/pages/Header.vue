@@ -35,6 +35,7 @@ const mainData = reactive({
 })
 
 const onRun = ()=> {
+  proxy.$store.loading = true; // 显示loading
   proxy.$store.consoleContent = []; // 清空console显示
   if(proxy.$store.languageType===1) {
     proxy.$store.docContent = createHtml(proxy.$store.htmlContent, proxy.$store.javascriptContent, proxy.$store.cssContent);
@@ -72,6 +73,7 @@ const createHtml = (htmlStr='', jsStr='', cssStr='')=> {
     <\/head>
     <body>
       <script src="/onlineEditor/lib/console.js"><\/script>
+      <script src="/onlineEditor/lib/loadingMsg.js"><\/script>
       ${body}
     <\/body>
     <\/html>
@@ -89,6 +91,7 @@ const createVue = (sfcStr)=> {
           <script src="/onlineEditor/lib/vue.runtime.global.prod.js"><\/script>
           <script src="/onlineEditor/lib/vue3-sfc-loader.js"><\/script>
           <script src="/onlineEditor/lib/console.js"><\/script>
+          <script src="/onlineEditor/lib/loadingMsg.js"><\/script>
           <script>
             /* <!-- */
             const config = {
@@ -155,6 +158,7 @@ const createTypescript = (tsStr)=> {
       <body>
         <script src="/onlineEditor/lib/typescriptServices.js"><\/script>
         <script src="/onlineEditor/lib/console.js"><\/script>
+        <script src="/onlineEditor/lib/loadingMsg.js"><\/script>
         <script>
           function transpile() {
             // 创建 TypeScript 编译器选项
