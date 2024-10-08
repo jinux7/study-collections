@@ -8,7 +8,7 @@
         placeholder="Select"
         size="mini"
         @change="onLanguageChange"
-        style="width: 100px; margin-left: 10px;"
+        style="width: 108px; margin-left: 10px;"
       >
         <el-option
           v-for="item in mainData.languageList"

@@ -6,7 +6,7 @@
       <div ref="refCss" class="css-wrap">css</div>
     </div>
     <div v-if="$store.languageType===2" ref="refVue" class="vue-wrap">vue</div>
-    <div v-else ref="refTypescript" class="typescript-wrap">typescript</div>
+    <div v-if="$store.languageType===3" ref="refTypescript" class="typescript-wrap">typescript</div>
   </div>
 </template>
 
