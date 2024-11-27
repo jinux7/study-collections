@@ -7,10 +7,10 @@
   "scripts": {
     "start": "nodemon --exec electron . --watch ./ --ext .js,.html,.css,.vue",
     "dev": "vite",
-    "build": "vite build",
+    "build": "node ./build/buildScript.js",
     "preview": "vite preview",
     "make": "electron-forge make",
-    "make2": "electron-packager . godex-printer --platform=win32 --arch=x64 --icon=public/icon.ico --out=out --overwrite"
+    "make2": "electron-packager . godex-printer --platform=win32 --arch=x64 --icon=build/icon.ico --out=out --overwrite"
   },
   "dependencies": {
     "electron-win-state": "^1.1.22",
@@ -26,6 +26,7 @@
     "@vitejs/plugin-vue": "^5.0.5",
     "electron": "^31.2.1",
     "electron-packager": "^17.1.2",
+    "fs-extra": "^11.2.0",
     "nodemon": "^3.1.4",
     "vite": "^5.3.4"
   }
