@@ -12,39 +12,67 @@ const koaApp = new Koa();
 const router = new Router();
 
 // 替换为你的设备的vendorId和productId
-const vendorId = 0x195F;
-const productId = 0x1;
+let vendorId = 0x195F;
+let productId = 0x1;
 
-function PrintLabel(info= {da1: '', da2: '', da3: ''}) {
+function PrintLabel(commands) {
 // 注意，下边的字符必须定格，否则发送到打印机解析不了。
-let commands = `
-^Q30,3
-^W50
-^H5
-^P1
-^S2
-^AT
-^C1
-^R0
-~Q+0
-^O0
-^D0
-^E12
-~R200
-^XSET,ROTATION,0
-^L
-Dy2-me-dd
-Th:m:s
-BQ,26,15,2,46,40,0,0,${info.da1}
-AE,25,130,1,1,0,0,${info.da2}
-AD,90,178,1,1,0,0,${info.da1}
-AB,310,114,1,1,0,0,${info.da3}
-XRB26,65,4,0,10
-${info.da2}
-XRB325,71,4,0,4
-${info.da3}
-E
-`;
+// let commands = `
+// ^Q30,3
+// ^W50
+// ^H5
+// ^P1
+// ^S2
+// ^AT
+// ^C1
+// ^R0
+// ~Q+0
+// ^O0
+// ^D0
+// ^E12
+// ~R200
+// ^XSET,ROTATION,0
+// ^L
+// Dy2-me-dd
+// Th:m:s
+// BQ,26,15,2,46,40,0,0,${info.da1}
+// AE,25,130,1,1,0,0,${info.da2}
+// AD,90,178,1,1,0,0,${info.da1}
+// AB,310,114,1,1,0,0,${info.da3}
+// XRB26,65,4,0,${info.da2.length}
+// ${info.da2}
+// XRB325,71,4,0,${info.da3.length}
+// ${info.da3}
+// E
+// `;
+// commands = `
+// ^Q30,3
+// ^W50
+// ^H5
+// ^P1
+// ^S2
+// ^AT
+// ^C1
+// ^R0
+// ~Q+0
+// ^O0
+// ^D0
+// ^E12
+// ~R200
+// ^XSET,ROTATION,0
+// ^L
+// Dy2-me-dd
+// Th:m:s
+// BQ,26,15,2,46,40,0,0,wl-1801
+// AE,25,130,1,1,0,0,100i100f7bi32500002
+// AD,90,178,1,1,0,0,3wl-1801
+// AB,310,114,1,1,0,0,2
+// XRB26,65,4,0,19
+// 100i100f7bi32500002
+// XRB325,71,4,0,1
+// 2
+// E
+// `;
   console.log(commands);
 	let device = usb.findByIds(vendorId, productId)
 	device.open()
@@ -130,17 +158,21 @@ koaApp.use(cors({
   maxAge: 100,
 }));
 router.post('/send/printinfo', async ctx=> {
-  const arr = ctx.request.body;
+  const body = ctx.request.body;
+  vendorId = +('0X'+body.vendorId);
+  productId = +('0x'+body.productId);
+  const arrTemplate = body.arrTemplate;
+  console.log(vendorId, productId);
   const resModel = {
     code: '200',
     message: 'success'
   };
   try{
-    arr.forEach(item => {
+    arrTemplate.forEach(item => {
 	    PrintLabel(item);
     });
   }catch(err) {
-    console.log(err);
+    // console.log(err);
     resModel.code = '500';
     resModel.message = '打印错误';
     ctx.status = 500;
