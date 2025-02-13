@@ -1,0 +1,25 @@
+{
+  "description": "",
+  "scripts": {
+    "build:server": "webpack --config ./build/server.config.js",
+    "build:client": "webpack --config ./build/client.config.js",
+    "build": "npm run build:client && npm run build:server",
+    "start": "nodemon ./dist/server/server_bundle.js"
+  },
+  "dependencies": {
+    "@babel/core": "^7.26.8",
+    "@babel/preset-env": "^7.26.8",
+    "babel-loader": "^9.2.1",
+    "css-loader": "^7.1.2",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9",
+    "style-loader": "^4.0.0",
+    "vue": "^3.5.13",
+    "vue-loader": "^17.4.2",
+    "vue-router": "^4.5.0",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-merge": "^6.0.1",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
