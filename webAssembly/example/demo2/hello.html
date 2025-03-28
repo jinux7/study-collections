@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WebAssembly Demo</title>
+</head>
+<body>
+    <h1>WebAssembly 加法示例</h1>
+    <script src="hello.js"></script>
+    <script>
+        Module.onRuntimeInitialized = () => {
+            const add = Module.cwrap('add', 'number', ['number', 'number']);
+            console.log('1 + 2 =', add(1, 2));
+        };
+    </script>
+</body>
+</html>

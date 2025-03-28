@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WebAssembly Demo</title>
+</head>
+<body>
+    <h1>WebAssembly C++调用JavaScript</h1>
+    <script src="math.js"></script>
+    <script>
+        Module.onRuntimeInitialized = () => {
+            Module.ccall('call_js');
+        };
+    </script>
+</body>
+</html>

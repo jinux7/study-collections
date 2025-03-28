@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WebAssembly Demo</title>
+</head>
+<body>
+    <h1>WebAssembly 乘法示例</h1>
+    <script src="math.js"></script>
+    <script>
+        Module.onRuntimeInitialized = () => {
+            const multiply = Module.cwrap('multiply', 'number', ['number', 'number']);
+            console.log('3 * 4 =', multiply(3, 4));
+        };
+    </script>
+</body>
+</html>
