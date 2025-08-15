@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>我的插件</title>
+  <link rel="stylesheet" href="popup.css">
+  <!-- 弹出页面的宽度和高度最好明确设置 -->
+  <style>
+    body {
+      width: 300px;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h1>你好，世界！</h1>
+  <p>这是一个简单的 Chrome 插件。</p>
+  <button id="changeColor">改变页面背景色</button>
+
+  <!-- 必须在 HTML 中直接引入 JS，不能使用内联脚本 -->
+  <script src="popup.js"></script>
+</body>
+</html>
