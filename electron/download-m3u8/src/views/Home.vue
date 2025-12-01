@@ -2,7 +2,10 @@
   <div>
     <el-form :model="form" ref="refForm" :rules="rules" label-width="auto">
       <el-form-item label="视频地址" prop="url">
-        <el-input v-model="form.url" :disabled="bDisabled" style="width: 100%;"/>
+        <el-input v-model="form.url" :disabled="bDisabled" style="width: 100%;">
+          <template #append>
+            <span @click="onPasted" class="pasted">复制剪贴板</span></template>
+        </el-input>
       </el-form-item>
       <el-form-item label="保存目录" prop="path">
         <div style="display: flex;justify-content: space-between;width: 100%;gap: 20px;">
@@ -57,10 +60,10 @@ const onDownload = ()=> {
     form.btnText = '下载';
     bDisabled.value = false;
     form.url = '';
-    form.path = '';
+    // form.path = '';
     form.fileName = '';
     form.processVal = 0;
-    refForm.value.resetFields();
+    // refForm.value.resetFields();
     return ;
   }
   refForm.value.validate(async valid=> {
@@ -94,6 +97,15 @@ onMounted(async ()=> {
 
   });
 });
+const onPasted = async ()=> {
+  try {
+    const str = await navigator.clipboard.readText();
+    form.url = str;
+    refForm.value.validateField('url');
+  } catch (err) {
+    console.error('无法读取剪贴板内容:', err);
+  }
+}
 
 const onSelectDirectory = async ()=> {
   await rendererApi.selectDirectory();
@@ -127,5 +139,8 @@ const onSelectDirectory = async ()=> {
       color: #fff;
     }
   }
+}
+.pasted {
+  cursor: pointer;
 }
 </style>
