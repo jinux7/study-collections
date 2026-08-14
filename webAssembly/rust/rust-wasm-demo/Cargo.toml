@@ -1,0 +1,12 @@
+[package]
+name = "rust-wasm-demo"
+version = "0.1.0"
+edition = "2024"
+
+# 必须指定 crate-type 为 cdylib，这样才能生成 .wasm 文件
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+# wasm-bindgen 是 Rust 与 JavaScript 之间的桥梁
+wasm-bindgen = "0.2"

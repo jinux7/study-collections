@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Rust Wasm 极简教程</title>
+</head>
+<body>
+    <h1>Rust Wasm 加法演示</h1>
+    <p>2 + 3 = <span id="result"></span></p>
+
+    <!-- 注意：type="module" 是必须的 -->
+    <script type="module">
+        // 1. 导入 wasm-pack 生成的 JS 绑定文件和 init 函数
+        import init, { add } from './pkg/rust_wasm_demo.js';
+
+        async function run() {
+            // 2. 初始化 Wasm 模块（加载 .wasm 文件）
+            await init();
+
+            // 3. 直接调用 Rust 编写的 add 函数
+            const result = add(2, 3);
+            document.getElementById('result').textContent = result;
+        }
+
+        run();
+    </script>
+</body>
+</html>
