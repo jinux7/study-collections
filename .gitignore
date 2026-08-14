@@ -4,6 +4,3 @@ node_modules
 .cache
 dist
 out
-
-webAssembly/rust/rust-wasm-demo/target
-webAssembly/rust/rust-wasm-demo/pkg

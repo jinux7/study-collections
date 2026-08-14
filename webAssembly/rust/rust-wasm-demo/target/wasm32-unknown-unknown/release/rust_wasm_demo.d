@@ -1,1 +1,0 @@
-D:\jinux\github\study-collections\webAssembly\rust\rust-wasm-demo\target\wasm32-unknown-unknown\release\rust_wasm_demo.wasm: D:\jinux\github\study-collections\webAssembly\rust\rust-wasm-demo\src\lib.rs
